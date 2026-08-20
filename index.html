@@ -6,11 +6,11 @@
     <title>長樂聲景 ｜ 滿州聲音地圖</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome 圖示庫 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS for Interactive Map -->
+    <!-- Leaflet 互動地圖 CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Leaflet JS -->
+    <!-- Leaflet 互動地圖 JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
@@ -22,7 +22,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
         }
 
-        /* Prevent iOS Safari auto-zoom on inputs */
+        /* 防止 iOS Safari 輸入框自動放大 */
         @media screen and (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
@@ -142,6 +142,7 @@
         </div>
     </header>
 
+    <!-- 手機版切換頁籤 -->
     <div class="md:hidden bg-slate-900 text-slate-300 border-b border-slate-800 flex items-center justify-around text-xs font-bold p-1 z-20 shrink-0">
         <button id="mobileTabMap" onclick="switchMobileView('map')" class="flex-1 py-2 px-3 rounded-lg text-center transition-all flex items-center justify-center space-x-1.5 bg-slate-800 text-emerald-400 shadow-sm">
             <i class="fa-solid fa-map-location-dot"></i>
@@ -155,7 +156,7 @@
 
     <main class="flex-1 flex flex-col md:flex-row overflow-hidden min-h-0 relative">
 
-        <!-- Map Section -->
+        <!-- 地圖區域 -->
         <section class="flex-1 relative h-full w-full bg-slate-200 order-1" id="map-container">
             <div id="map" class="w-full h-full z-0 min-h-[250px]"></div>
 
@@ -171,7 +172,7 @@
             </div>
         </section>
 
-        <!-- Sidebar Section -->
+        <!-- 側邊欄區域 -->
         <section id="sidebarSection" class="w-full md:w-[360px] lg:w-[420px] bg-white border-l border-slate-200 flex flex-col shrink-0 z-10 shadow-lg order-2 hidden md:flex h-full min-h-0 overflow-hidden">
             
             <div class="p-3.5 bg-slate-50 border-b border-slate-200 space-y-2.5 shrink-0">
@@ -204,8 +205,10 @@
                 </div>
             </div>
 
+            <!-- 聲音點位卡片列表 -->
             <div id="soundList" class="flex-1 min-h-0 overflow-y-auto p-3 space-y-2.5 bg-slate-50/50"></div>
 
+            <!-- 播放器工具列 -->
             <div id="playerBar" class="border-t border-slate-200 bg-white p-3.5 pb-8 md:pb-3.5 shadow-2xl transition-all hidden shrink-0 z-30">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center space-x-2.5 overflow-hidden pr-2">
@@ -307,13 +310,13 @@
             </div>
         </div>
 
-        <!-- AUTH SCREEN -->
+        <!-- 驗證畫面 -->
         <div id="adminAuthScreen" class="p-8 flex-1 flex flex-col justify-center items-center text-center">
             <div class="w-14 h-14 bg-slate-800 rounded-full flex items-center justify-center text-emerald-400 mb-4 border border-slate-700">
                 <i class="fa-solid fa-lock text-xl"></i>
             </div>
             <h3 class="font-bold text-base">請輸入通行碼</h3>
-            <p class="text-xs text-slate-400 mt-1 mb-4">請輸入後台管理員授權通行碼以進行編輯</p>
+            <p class="text-xs text-slate-400 mt-1 mb-4">預設通行碼：changle2026</p>
             <input type="text" id="adminPassInput" onkeydown="if(event.key === 'Enter') verifyAdminPass()" placeholder="通行碼" class="w-48 text-center py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 mb-2">
             <p id="adminAuthMsg" class="text-xs text-rose-400 hidden mb-2"></p>
             <button onclick="verifyAdminPass()" class="w-48 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 rounded-lg transition-colors">
@@ -321,10 +324,30 @@
             </button>
         </div>
 
-        <!-- MAIN ADMIN SCREEN -->
+        <!-- 後台主功能畫面 -->
         <div id="adminMainScreen" class="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-5 hidden text-left">
             
-            <!-- Quick JSON Actions Box -->
+            <!-- Gemini API 金鑰設定盒 -->
+            <div class="bg-slate-800/90 border border-indigo-500/40 p-3.5 rounded-2xl space-y-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-xs text-indigo-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-key"></i>
+                        <span>Gemini API 金鑰設定</span>
+                    </h4>
+                    <span id="apiKeyStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">未設定</span>
+                </div>
+                <p class="text-[10px] text-slate-400 leading-relaxed">
+                    請在此貼上來自 Google AI Studio 的免費 API 金鑰 (以 AIzaSy 開頭)。設定後瀏覽器會自動儲存，AI 文化解說員即可順暢回答！
+                </p>
+                <div class="flex space-x-2 pt-1">
+                    <input type="password" id="adminApiKeyInput" placeholder="AIzaSy..." class="flex-1 px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 font-mono">
+                    <button type="button" onclick="saveGeminiApiKeyFromAdmin()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition-colors shrink-0">
+                        儲存 Key
+                    </button>
+                </div>
+            </div>
+
+            <!-- JSON 資料備份同步盒 -->
             <div class="bg-slate-800/90 border border-emerald-500/40 p-3.5 rounded-2xl space-y-2">
                 <div class="flex items-center justify-between">
                     <h4 class="font-bold text-xs text-emerald-300 flex items-center gap-1.5">
@@ -332,7 +355,7 @@
                         <span>JSON 資料同步管理</span>
                     </h4>
                 </div>
-                <p class="text-[10px] text-slate-400">新增或修改完點位後，點擊下方按鈕複製完整 JSON 資料，更新程式碼即可上傳 Netlify / GitHub 生效。</p>
+                <p class="text-[10px] text-slate-400">新增或修改完點位後，點擊下方按鈕複製完整 JSON 資料，更新程式碼即可同步。</p>
                 <div class="flex space-x-2 pt-1">
                     <button onclick="copyCurrentJSON()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 rounded-xl transition-colors shadow-sm flex items-center justify-center space-x-1.5">
                         <i class="fa-solid fa-copy"></i>
@@ -345,36 +368,31 @@
                 </div>
             </div>
 
-            <!-- AI Knowledge Base Supplementary Data Box -->
+            <!-- AI 總資料庫盒 -->
             <div class="bg-slate-800/90 border border-amber-500/40 p-3.5 rounded-2xl space-y-2.5">
                 <div class="flex items-center justify-between">
                     <h4 class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
                         <i class="fa-solid fa-book-bookmark"></i>
-                        <span>AI 解說員專用 — 深度田調補充資料庫</span>
+                        <span>AI 解說員專用 — 全區跨主題總資料庫（備用）</span>
                     </h4>
                     <span class="text-[9px] font-bold bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">不公開於小誌</span>
                 </div>
                 <p class="text-[10px] text-slate-400 leading-relaxed">
-                    這裡可貼入團隊訪問的<b>原始對話逐字稿與筆記</b>。內容<b>不會顯示在小誌畫面上</b>，但 AI 解說員與故事生成器會自動讀取並梳理這些對話內容！
+                    這裡可放置長樂部落的總體簡介、跨主題背景知識。<b>各個聲景專屬的逐字稿請直接填在下方點位表單中喔！</b>
                 </p>
                 <div class="space-y-2">
-                    <textarea id="fKnowledgeBase" rows="8" placeholder="請在此貼入原始對話逐字稿、訪談對話筆記... (支援對話格式與多字數，可拖拉右下角拉大文字框)" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-400 resize-y min-h-[120px] font-mono leading-relaxed"></textarea>
+                    <textarea id="fKnowledgeBase" rows="3" placeholder="全區總體背景筆記..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-400 resize-y min-h-[60px] font-mono leading-relaxed"></textarea>
                     
                     <div class="flex space-x-2">
-                        <button type="button" onclick="saveKnowledgeBase()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 rounded-xl transition-colors shadow-sm flex items-center justify-center space-x-1.5">
+                        <button type="button" onclick="saveKnowledgeBase()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-1.5 rounded-xl transition-colors shadow-sm flex items-center justify-center space-x-1.5">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            <span>儲存 AI 補充資料庫</span>
+                            <span>儲存總背景資料</span>
                         </button>
-                        <label class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl cursor-pointer transition-colors flex items-center justify-center space-x-1.5 shrink-0">
-                            <i class="fa-solid fa-file-arrow-up"></i>
-                            <span>上傳 .txt 檔</span>
-                            <input type="file" accept=".txt" onchange="handleTxtUpload(event)" class="hidden">
-                        </label>
                     </div>
                 </div>
             </div>
 
-            <!-- Welcome Overlay Config Box -->
+            <!-- 歡迎頁設定盒 -->
             <div class="bg-slate-800/60 border border-slate-700 p-3.5 rounded-2xl flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-9 h-9 rounded-xl bg-slate-700 text-emerald-400 flex items-center justify-center text-base border border-slate-600">
@@ -390,7 +408,7 @@
                 </button>
             </div>
 
-            <!-- Editing Active Banner -->
+            <!-- 編輯中提示標條 -->
             <div id="editBanner" class="bg-amber-500/20 border border-amber-500/40 p-2.5 rounded-xl flex items-center justify-between hidden">
                 <span id="editBannerText" class="text-xs text-amber-300 font-medium">⚠️ 正在編輯點位資料</span>
                 <button onclick="cancelEdit()" class="text-xs bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded-md transition-colors font-bold">
@@ -398,7 +416,7 @@
                 </button>
             </div>
 
-            <!-- Sound Form -->
+            <!-- 點位新增/修改表單 -->
             <form id="soundForm" onsubmit="handleFormSubmit(event)" class="space-y-3.5 pt-1">
                 <input type="hidden" id="editId" value="">
 
@@ -442,14 +460,35 @@
                     <input type="text" id="fQuote" required placeholder="例如：【 釀造是豐收之後的事 】" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
                 </div>
 
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-bold text-slate-300">田調故事典故 (~200字，公開展示於聲音小誌) *</label>
-                        <button type="button" onclick="generateAiStoryContent()" class="text-[10px] text-emerald-400 hover:underline flex items-center gap-1 font-bold">
+                <!-- 點位專屬逐字稿盒 -->
+                <div class="bg-slate-800/80 border border-amber-500/40 p-3 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-bold text-amber-300 flex items-center gap-1">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span>本點位專屬 — AI 深度田調逐字稿 / 補充資料 *</span>
+                        </label>
+                        <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">AI 專用不公開</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">
+                        請在此貼入<b>本點位主題的原始訪問對話逐字稿</b>。小誌不展現此內容，但 AI 解說員與故事生成器會自動讀取它！
+                    </p>
+                    <textarea id="fTranscript" rows="6" placeholder="請在此貼入本點位的訪談逐字稿對話、詳細田調筆記..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400 resize-y min-h-[100px] font-mono leading-relaxed"></textarea>
+                    
+                    <div class="flex items-center space-x-2 pt-1">
+                        <label class="flex-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-[11px] font-bold py-1.5 px-3 rounded-lg cursor-pointer transition-colors flex items-center justify-center space-x-1.5 border border-amber-500/30">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                            <span>📁 上傳此點位 .txt 逐字稿</span>
+                            <input type="file" accept=".txt" onchange="handleItemTxtUpload(event)" class="hidden">
+                        </label>
+                        <button type="button" onclick="generateAiStoryContent()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold py-1.5 px-3 rounded-lg transition-colors flex items-center justify-center space-x-1 shadow-sm">
                             <i class="fa-solid fa-sparkles text-amber-300"></i>
-                            <span>✨ AI 從逐字稿提煉故事與金句</span>
+                            <span>✨ AI 從逐字稿提煉小誌故事</span>
                         </button>
                     </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">田調故事典故 (~200字，公開展示於聲音小誌) *</label>
                     <textarea id="fStory" required rows="4" placeholder="詳細描寫當時錄音的情境與故事背景..." class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
                 </div>
 
@@ -463,9 +502,6 @@
             <div class="pt-4 border-t border-slate-800">
                 <div class="flex items-center justify-between mb-2">
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">已發佈聲景列表</h4>
-                    <button onclick="resetSoundsToDefault()" class="text-[10px] text-slate-400 hover:text-amber-400 underline">
-                        重置為預設資料
-                    </button>
                 </div>
                 <div id="adminSoundList" class="space-y-2"></div>
             </div>
@@ -523,7 +559,6 @@
         </div>
     </div>
 
-    <!-- AI Cultural Assistant Drawer -->
     <div id="aiDrawer" class="fixed inset-y-0 left-0 w-full sm:w-[420px] bg-slate-900 text-white z-[3500] shadow-2xl -translate-x-full transition-transform duration-300 flex flex-col border-r border-slate-800">
         <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between shrink-0">
             <div class="flex items-center space-x-2">
@@ -535,9 +570,15 @@
                     <p class="text-[10px] text-slate-400">已連結實地採訪逐字稿庫</p>
                 </div>
             </div>
-            <button onclick="toggleAiDrawer(false)" class="text-slate-400 hover:text-white p-1">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+            <div class="flex items-center space-x-1.5">
+                <button onclick="promptForApiKey()" title="設定 Gemini API Key" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 px-2 py-1 rounded-lg border border-slate-700 flex items-center space-x-1">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Key 設定</span>
+                </button>
+                <button onclick="toggleAiDrawer(false)" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
         </div>
 
         <div id="aiChatBox" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs text-left">
@@ -562,7 +603,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[5000] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xs w-full p-5 text-center shadow-2xl border border-slate-100">
             <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -582,7 +622,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="copyToast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white border border-emerald-500/50 px-4 py-3 rounded-2xl shadow-2xl z-[7000] flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
         <div class="w-7 h-7 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-bold shrink-0">
             <i class="fa-solid fa-check"></i>
@@ -605,7 +644,7 @@
             btnText: '進入地圖聆聽長樂聲景'
         };
 
-        /* 最新長樂村聲音點位種子資料 (含使用者更新後之內容) */
+        /* 最新長樂村聲音點位種子資料 (包含完整的訪談逐字稿對話) */
         const INITIAL_SOUND_SEEDS = [
             {
                 "id": "s_1787251948607",
@@ -616,6 +655,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/4ipc2shcgghxeh0blv8bb/.jpg?rlkey=u70bpzbz7m4mqwonxih44jpil&st=yum03d0w&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/rmm09zgwsco6ci6p1ba6b/.mp3?rlkey=ia0xwpf4k06pxj7qjys5m2f1i&st=ispmdr6e&raw=1",
                 "quote": "【 疊土磚要抓準水平，像梳理頭髮般整齊 】",
+                "transcript": "土磚屋\n\n\n參與者\n語者1、語者2\n\n================\n逐字稿\n\n語者1 \n要不然我直接現在回答你們怎麼做一些土磚磚首先，要做那個模型的時候，一定要25公分\n\n語者1 \n的寬度，長度要40，\n\n語者1 \n那這個模型的高度差不多15公分，或到20公分，\n\n語者1 \n開始跌的時候，下面的基礎一定，最好是整個房子的基礎，可以的話，用石頭疊起來，但疊起來必須要用沙子和水泥混在一起，然後開始跌10朵，差不多，從地面上來，20公分到40公分的話，都以預防下雨的時候才不會融化掉，\n\n語者1 \n那上來之後開始抓水平，水平抓平以後，開始點，那個土穿的時候，大概每1個空隙，然後兼具大到一公分到兩公分的間距，然後放泥巴泥巴要黏好，就是可以黏得住，不要放太厚會不穩，所以你跌的時候要拉整個是方的角度，一定要抓，準要抓平，這樣的話，每一次跌的時候才會順會好看，而且預防地震的時候就比較不容易\n\n語者1 \n跑掉，差不多，跌了差不多30塊的高度的時候，最好是方的時候放兩條的那個竹片長一點，這個是為了他有那個力點和支點越高的時候才不會跑掉，對土川的作用會很有幫助\n\n語者1 \n那上來就是看你自己的房子的高度有多高，就是要疊多，高，\n\n語者1 \n不過你的房子，的高度，一般我們外面的水泥的房子差不多三米，232的話，你要蓋的是屋及的話，三米二的高度，你屋及必須要高到50公分，中間的巫即50公分，然後波度到旁邊的時候是三米\n\n語者1 \n兩邊，這樣的話，會房子比較有那個幅度，前面看一次的房間是幾個，你有客廳，然後兩邊還有房間的話，就隔三間，你房子越寬多少你的你的尺寸可能是一副的，客廳的寬度是算是四米二好了你旁邊的在隔的房子是一班，差不多兩米，這樣的話就變成有3個，房間，有3個，\n\n語者1 \n等於300了，中間，變成你的客廳的話是1個大門，在中間大門，在中間的兩邊，需要有兩個窗戶，\n\n語者1 \n窗戶的高度從店面上了差不多100公分到一百二，這樣你的窗戶要多寬？是你可以衡量這個部分從門的中間分開到旁邊的柱子的腳大概多少擺下去的時候，最好裝附的上演跟你的門的上演平行的話，從正面看是\n\n語者1 \n以你後面的時候，也要有一些窗戶採光，還有可以說美觀看你的後面的妝要幾個，你自己衡量判斷，那這樣的話，你就會覺得房子做好以後就比較一致比較一\n\n語者1 \n體格邊的隔間的，另外1個房間，一樣，中間，你必須要有窗戶，那個窗戶的高度是不是要90或者是一百二的寬度看你要有窗戶，也有多大，你自己判斷，所以你設計的時候會先考慮到這種，如果你的房子很窄的話，你窗戶越大，也不怎麼看嗎？不美觀，所以這一點很重要，但是你房子的屋頂的時候，屋幾道前面和後面可以轉，這個房子的房子的長度多少你從這樣來算到前面，如果是總共是八米的話，從八米的中間來算，因為坡度可以拉多長，就會有比較好看，而且你可以衡量，應該怎麼樣抓比較好談到這裡的時候，你屋頂的糧盡可能如果是木頭是最好，如果不是就是檳榔樹早期的房子是檳榔樹和木頭，\n\n語者1 \n木頭的話，看你要用杉木，或者是一般，我們這邊野生的一些木頭是要值，一定要這樣，你房子在上面的時候才會平行啊。不能彎彎，所以冰龍是很值，是不是？所以從屋脊到兩邊的時候，後面也是要放，那以後你的波度一拉上來之後，那牽涉到你要放橫的竹竿的豬肝，就是以那個量的高度和後面的量的錢後，一定要有量和中間屋脊，妳的波度的時候就是跟著那個一樣，要拉1條線，最好是買水就拉持，高度才不會高高、低低，那以後你就開始放茅草我是建議啦。現在這個社會比較好用的我們的是那個為菜園的那個黑網子，\n\n語者1 \n有洞有洞，這種先擺下去，然後再放茅草，從下面看比較美觀，那以前\n\n語者1 \n呢？以前沒有以前是什麼，然後你在擺那個茅草的時候要擺整齊，從旁邊的時候，從旁邊也要夾起來，還有中間盡可能用鐵絲12號、12號的鐵絲，\n\n語者1 \n知道嗎？你會做模板的怎麼脫皮要人工，那已是用什麼\n\n語者1 \n綁我以前是用已經用藤條，然後妳疼，妳要到山上，看，然後切片\n\n語者1 \n去播這樣子，對於撥開1根的話，差不多，像我的大拇指給它切成4片，然後那個皮表皮給他中間凸出來的，給他，拿掉這樣比較薄一點綁起來，比較好看\n\n語者2 \n那以前黑，網的那個是用竹子嗎？\n\n語者1 \n以前的上面的時候，用的都是茅草啦\n\n語者2 \n那有沒有什麼要夾住他\n\n語者1 \n的？當然你茅草蓋好以後要房子，如果說你的房子的寬度，我講是三米好了，你的房子的寬度，三米的是要露出來，出去30公分，兩邊要出去30公分，\n\n語者1 \n你知道嗎？下大雨的時候才不會播到，那個圖上才不會融化掉，等於好像與皮的作用或前面也是一樣，要生出來，茅草蓋好以後，是不是完成了？最前面的是不是要好看剪刀剪要撿錢後一定要剪，然後好像你頭髮，你要整集啊。茅草\n\n語者1 \n的長度也都是常常不一定，但是你最後面的是一定要綁1根給他夾起來，有竹子的話，要用體是現在用體是比較好了，我現在有體試是就可以了，夾緊之後，然後再擺的時候，因為你綁的位置，你的毛只要生出來要超過，要不然從那邊落水就是會對，一定是相疊，你看這樣，從這邊開始跌的時候再繼續跌上來，一直跌往後，這個後面完成是在污及對完成的事，在屋及從前面\n\n語者1 \n鋪毛草的從前面開始，噗噗噗上來，到屋脊結束後面開始，那個茅草的時候也是擺一擺，擺到屋脊的時候，是不是有兼具這個時候就是要用茅草在中間這個屋脊的部分，這邊，茅草兩邊要凸出來，來，蓋那個屋脊，要不然從那邊落水，所以你寄的地方就是你最後是在放放那個呀竹竿，但是你要押之前，所以我建議現在毛1年就要開始翻修一次，為什麼會浮濫嗎？買那個什麼防潮不透明的防潮布蓋在茅草的上面，有什麼好處？下雨下雨不會進去，裡面茅草不會那麼快，爛掉的好處是冬暖夏涼，百分之百以前老人家都很有智慧啊。\n\n語者2 \n以前那個土磚的外圍會因為他都是圖嘛你還會再加茅草給他蓋\n\n語者1 \n上去嗎？有些時候以前早期是用沒有水泥，是用那個牛牛糞跟那些\n\n語者1 \n對到把它攪拌，但是現在用水裡面來粉刷嘛。你可以粉刷外面\n\n語者1 \n用水泥粉刷也可以啊。對對，但是你看起來好像是屬於你的方式，不要的話，你就露出來，那個為什麼跌穿藥瓶\n\n語者1 \n以後，你就用一些像\n\n語者1 \n一些東西把它粉刷磨好嘛。你會看到一的有1個美觀的作用，\n\n語者1 \n這樣是不是像這樣會有那個美觀的作用好像有點貼紙真一樣的意思，\n\n語者1 \n這樣做的話，你這個房子很重，我現在有1個方法，就是我自己判斷屋及的地方，我們平常不會有一些老虎窗別墅的那個老虎窗，中間會放做1個窗戶，\n\n語者1 \n天氣熱的時候會有透氣的\n\n語者1 \n作用，像那個房子的屋脊啊這個中間的對放1個，就是說那側旁邊喔因為如果你房子是這樣的話，中策兩邊都要放兩個窗戶啊。\n\n語者1 \n你看用這樣，下1天的時候，熱的時候，那個空氣是不是往上面浮上來就流出去了，那個熱度不會那麼熱，或者是說也可以打開，等於好像要開天窗一樣的，\n\n語者1 \n對如果這樣做的話，你就房子比較一致，好，看你做完以後要怎麼樣，一定還是很粗糙，\n\n語者1 \n所以需要不是有一些契機嗎？因為現\n\n語者1 \n大把它割一下凸出來的，讓他有1個好看平行，不會有那個凸出來，有時候高低不平啊。是不是那樣做出來的時候就比較有誠意，有些人他們的方法是，以後旁邊他們還做一些牆壁什麼牆壁\n\n語者1 \n竹片啦。\n\n語者1 \n保護那個土磚\n\n語者2 \n貼在外面\n\n語者1 \n外面對，然後你那個圖片，當然也是要做1個柱子，然後綁橫的\n\n語者1 \n保護那個圖穿不會那麼快下大雨颱風颳風，他與一直吹，他會\n\n語者2 \n融化，你不是會那個竹片裡面還會套茅草嗎？還是就不會就，存竹片\n\n語者1 \n而已？要啊。要啊你茅草不用啦就是竹片而已，因為整個竹片很粗嘛給他切開，像那個tatami一樣啊。\n\n語者1 \n以後，你這樣在擺起來\n\n語者1 \n也蠻好看的啊。看看你可以衡量一下，一種不美觀啊。對不對？每個人的那個什麼神明的觀念不太一樣如果你要弄好，看，你去拜照一些，其他，地方，的然後用你自己所知道的來套在一起\n\n語者1 \n就會漂亮，比較藝術，然後\n\n語者1 \n有沒有人光靠的那種藝術有沒有\n\n語者1 \n像現在的房子不是講，就比如說美觀有\n\n語者1 \n吐出來的圓形、高低、凹凸的，但是外面你看的是很精緻的房子一樣，\n\n語者1 \n所以你思考的時候，既然你先打1個社區的南部，我認為我以後這個房子外觀是怎麼樣的\n\n語者1 \n形狀所以你要做1個平面圖，蓋房子之前，一定要有那個構思做1個平面圖，房子要多寬，你的長度要\n\n語者1 \n多少你的窗戶的位置要在哪裡，所以那個就是像你看你看窗戶是不是都有一定的高度，你地面的話，你看你弟平常川普是差不多100公分到一百二，然後才有1個窗戶，是不是一定是這樣啊\n\n語者1 \n一般的社區這樣如果你太高的話，除非是廁所，為了隱私嘛不可能會很低啊。那個雙佛為了隱私，所以窗戶會比較高，\n\n語者1 \n主要的原因是這樣，一般因為我蓋房子從小16歲蓋房子，\n\n語者1 \n我測量還有用plus都用過，微波的電腦都有，我會看圖看圖，所有的圖、鋼筋、水泥都對皮是對，\n\n",
                 "story": "土磚屋是土地共息的築屋手藝。每一塊土磚都需精準測量，長四十、寬二十五公分，疊砌時還得襯入竹片強化骨架。\n\nVUVU叮嚀，地基必須墊高，才不會使落雨融了土牆。最美的是那以檳榔樹為樑、茅草為頂的堅持，待屋頂鋪齊後，還要如修剪秀髮般理出流暢的線條。這不只是一座遮風避雨的土磚屋，更是長樂部落耆老們用一生閱歷，將泥土與汗水揉合而成的集體記憶，讓族人冬暖夏涼的智慧，在當代的陽光下重新發亮。"
             },
             {
@@ -627,14 +667,62 @@
                 "photoUrl": "https://www.dropbox.com/scl/fi/2dlkxp9uqkzsrg5ufrky0/.jpg?rlkey=0zxcak1bv1jkairptgkk58b82&st=0jktnky8&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/8e4yu29o13kzkw9vuwi8n/.mp3?rlkey=ha359jbub3q4qihnd3chvnllg&st=ooew1ynn&raw=1",
                 "quote": "【 釀造是豐收之後的事 】",
-                "story": "VUVU告訴我們，在部落裡，釀酒不只是一種技術，更是一種對於在地風土的濃縮。\n\n從蒸糯米開始，我們一步步跟著VUVU的動作，將米白色的酒麴曬乾後碾碎，以徹底釋放酵母的活力；接著把pawl與熱水澆注在甕裡，使其產生香氣並達到殺菌的效果，最後再倒入準備好的糯米並封存等待。"
+                "story": "VUVU告訴我們，在部落裡，釀酒不只是一種技術，更是一種對於在地風土的濃縮。\n\n從蒸糯米開始，我們一步步跟著VUVU的動作，將米白色的酒麴曬乾後碾碎，以徹底釋放酵母的活力；接著把pawl與熱水澆注在甕裡，使其產生香氣並達到殺菌的效果，最後再倒入準備好的糯米並封存等待。",
+                "transcript": "團隊訪問紀錄：黃好花VUVU家傳統釀酒\n訪談者：混青年團隊\n受訪者：黃好花 VUVU\n問：釀酒什麼時候開始？要注意什麼？\n答：釀酒是豐收過後的事情。糯米要蒸熟，酒麴要先曬乾碾碎。酒甕要先用熱水跟植物pawl沖洗殺菌去味。糯米放涼後拌入酒麴，放進甕裡面封起來，發酵需要時間，味道才會又香又醇。"
             }
         ];
 
-        /* Embedded Gemini API Key */
-        const GEMINI_API_KEY = "AQ.Ab8RN6IWLoYHwvNZx7gWHok43jj2yI6MHO62HaxjeZe2HXMiZA";
+        function getGeminiApiKey() {
+            return (localStorage.getItem('changle_gemini_key') || '').trim();
+        }
 
-        /* Local State */
+        function saveGeminiApiKey(key) {
+            if (!key) {
+                localStorage.removeItem('changle_gemini_key');
+            } else {
+                localStorage.setItem('changle_gemini_key', key.trim());
+            }
+            updateApiKeyUIStatus();
+        }
+
+        function updateApiKeyUIStatus() {
+            const currentKey = getGeminiApiKey();
+            const badge = document.getElementById('apiKeyStatusBadge');
+            const input = document.getElementById('adminApiKeyInput');
+            if (badge) {
+                if (currentKey) {
+                    badge.textContent = "已設定";
+                    badge.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                } else {
+                    badge.textContent = "未設定";
+                    badge.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                }
+            }
+            if (input && currentKey && !input.value) {
+                input.value = currentKey;
+            }
+        }
+
+        function saveGeminiApiKeyFromAdmin() {
+            const input = document.getElementById('adminApiKeyInput');
+            if (input) {
+                saveGeminiApiKey(input.value);
+                showCopyToast("🔑 API 金鑰儲存成功！", "AI 文化解說員與故事生成功能現已可以使用。");
+            }
+        }
+
+        function promptForApiKey() {
+            const current = getGeminiApiKey();
+            const key = prompt("請輸入您的 Google Gemini API 金鑰 (以 AIzaSy 開頭)：\n(可至 Google AI Studio 免費申請 API Key)", current);
+            if (key !== null) {
+                saveGeminiApiKey(key);
+                if (key.trim()) {
+                    showCopyToast("🔑 API 金鑰儲存成功！", "您可以開始使用 AI 文化導覽與提煉功能。");
+                }
+            }
+        }
+
+        /* 應用程式全域狀態 */
         let sounds = [...INITIAL_SOUND_SEEDS];
         let welcomeConfig = JSON.parse(localStorage.getItem('changle_welcome')) || { ...DEFAULT_WELCOME_CONFIG };
 
@@ -649,7 +737,7 @@
         let deleteTargetId = null;
         window.isUserSeeking = false;
 
-        /* Audio Engine */
+        /* 聲音播放引擎 */
         let audioElement = null;
 
         function initMap() {
@@ -877,6 +965,9 @@
         }
 
         function stopAllAudio() {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
             if (audioElement) {
                 audioElement.pause();
                 audioElement.removeAttribute('src');
@@ -1087,6 +1178,7 @@
                 photoUrl: formatCloudUrl(rawPhoto),
                 audioUrl: formatCloudUrl(rawAudio),
                 quote: document.getElementById('fQuote').value,
+                transcript: document.getElementById('fTranscript').value || '',
                 story: document.getElementById('fStory').value
             };
 
@@ -1101,54 +1193,7 @@
             clearPickerMarker();
             resetAdminForm();
             resetWindowScroll();
-            showCopyToast("已新增/更新點位！", "點擊「一鍵複製 JSON」可複製最新設定檔。");
-        }
-
-        function copyCurrentJSON() {
-            const jsonStr = JSON.stringify(sounds, null, 2);
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(jsonStr).then(() => {
-                    showCopyToast("📋 JSON 資料已複製！", "您可以直接貼回 HTML 中的 INITIAL_SOUND_SEEDS 變數。");
-                }).catch(() => {
-                    fallbackCopyText(jsonStr);
-                });
-            } else {
-                fallbackCopyText(jsonStr);
-            }
-        }
-
-        function fallbackCopyText(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showCopyToast("📋 JSON 資料已複製！", "您可以直接貼回 HTML 中的 INITIAL_SOUND_SEEDS 變數。");
-            } catch (err) {
-                alert("請手動複製下列 JSON 資料：\n\n" + text);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        function importJSONPrompt() {
-            const input = prompt("請貼上欲匯入的點位 JSON 陣列資料：");
-            if (!input) return;
-            try {
-                const parsed = JSON.parse(input);
-                if (Array.isArray(parsed)) {
-                    sounds = parsed;
-                    renderApp();
-                    resetMapCenter();
-                    showCopyToast("📥 匯入成功！", "已載入新點位資料。");
-                } else {
-                    alert("格式不正確！JSON 必須為點位陣列 [ ... ]。");
-                }
-            } catch (e) {
-                alert("JSON 解析失敗，請檢查格式是否正確！");
-            }
+            showCopyToast("已新增/更新點位！", "點擊「一鍵複製 JSON」可備份包含逐字稿的完整資料。");
         }
 
         function editSound(id) {
@@ -1163,6 +1208,7 @@
             document.getElementById('fPhotoUrl').value = s.photoUrl || '';
             document.getElementById('fAudioUrl').value = s.audioUrl || '';
             document.getElementById('fQuote').value = s.quote || '';
+            document.getElementById('fTranscript').value = s.transcript || '';
             document.getElementById('fStory').value = s.story || '';
 
             handleLatLngInput();
@@ -1173,14 +1219,60 @@
         }
 
         function cancelEdit() {
-            clearPickerMarker();
             resetAdminForm();
+        }
+
+        function handleItemTxtUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const el = document.getElementById('fTranscript');
+                if (el) el.value = text;
+                showCopyToast("📄 已成功載入本點位 `.txt` 逐字稿！", "可點擊「✨ AI 提煉」自動生成小誌故事與金句。");
+            };
+            reader.readAsText(file, 'UTF-8');
         }
 
         function resetAdminForm() {
             document.getElementById('soundForm').reset();
             document.getElementById('editId').value = '';
+            document.getElementById('fTranscript').value = '';
             document.getElementById('editBanner').classList.add('hidden');
+        }
+
+        function copyCurrentJSON() {
+            const jsonString = JSON.stringify(sounds, null, 2);
+            const textarea = document.createElement('textarea');
+            textarea.value = jsonString;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showCopyToast("已複製 JSON 資料！", "可貼回程式碼作為預設點位資料庫。");
+            } catch (e) {
+                alert("複製失敗，請手動複製！");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function importJSONPrompt() {
+            const raw = prompt("請貼入要覆蓋的完整點位 JSON 陣列：");
+            if (!raw) return;
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    sounds = parsed;
+                    renderApp();
+                    resetMapCenter();
+                    showCopyToast("JSON 覆蓋成功！", `已載入 ${sounds.length} 筆聲音點位。`);
+                } else {
+                    alert("格式不符，必須為 JSON 陣列！");
+                }
+            } catch (e) {
+                alert("JSON 格式解析錯誤，請檢查內容！");
+            }
         }
 
         function showCopyToast(title, msg) {
@@ -1217,14 +1309,6 @@
             closeDeleteModal();
         }
 
-        function resetSoundsToDefault() {
-            sounds = [...INITIAL_SOUND_SEEDS];
-            if (activeSoundId) closePlayer();
-            renderApp();
-            resetMapCenter();
-            showCopyToast("已重置資料", "還原至預設種子點位。");
-        }
-
         function openWelcomeEditorModal() {
             document.getElementById('wTeamTag').value = welcomeConfig.teamTag;
             document.getElementById('wTitle').value = welcomeConfig.title;
@@ -1257,7 +1341,6 @@
             document.getElementById('wBtnText').value = welcomeConfig.btnText;
         }
 
-        /* 田調知識庫管理函式 */
         function loadKnowledgeBase() {
             const kbText = localStorage.getItem('changle_knowledge_base') || '';
             const el = document.getElementById('fKnowledgeBase');
@@ -1272,19 +1355,6 @@
             showCopyToast("田調知識庫已儲存！", "AI 文化解說員將會依據此內容解答問題。");
         }
 
-        function handleTxtUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const el = document.getElementById('fKnowledgeBase');
-                if (el) el.value = text;
-                saveKnowledgeBase();
-            };
-            reader.readAsText(file, 'UTF-8');
-        }
-
         async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
             let delay = 1000;
             for (let i = 0; i < maxRetries; i++) {
@@ -1297,6 +1367,10 @@
                     if (response.ok) {
                         return await response.json();
                     }
+                    if (response.status === 401) {
+                        showCopyToast("⚠️ Gemini API 金鑰驗證失敗 (401)", "請點擊「Key 設定」或在後台輸入有效的金鑰");
+                        throw new Error("API error: 401 (Unauthorized)");
+                    }
                     if (response.status === 429) {
                         await new Promise(res => setTimeout(res, delay));
                         delay *= 2;
@@ -1304,53 +1378,14 @@
                     }
                     throw new Error(`API error: ${response.status}`);
                 } catch (err) {
+                    if (err.message.includes("401")) {
+                        throw err;
+                    }
                     if (i === maxRetries - 1) throw err;
                     await new Promise(res => setTimeout(res, delay));
                     delay *= 2;
                 }
             }
-        }
-
-        function pcm16ToWavBlob(base64Pcm, sampleRate = 24000) {
-            const binaryString = atob(base64Pcm);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            const pcm16 = new Int16Array(bytes.buffer);
-            
-            const numChannels = 1;
-            const bytesPerSample = 2;
-            const blockAlign = numChannels * bytesPerSample;
-            const byteRate = sampleRate * blockAlign;
-            const dataSize = pcm16.length * bytesPerSample;
-            const buffer = new ArrayBuffer(44 + dataSize);
-            const view = new DataView(buffer);
-
-            function writeString(v, offset, str) {
-                for (let i = 0; i < str.length; i++) v.setUint8(offset + i, str.charCodeAt(i));
-            }
-
-            writeString(view, 0, 'RIFF');
-            view.setUint32(4, 36 + dataSize, true);
-            writeString(view, 8, 'WAVE');
-            writeString(view, 12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, numChannels, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, byteRate, true);
-            view.setUint16(32, blockAlign, true);
-            view.setUint16(34, 16, true);
-            writeString(view, 36, 'data');
-            view.setUint32(40, dataSize, true);
-
-            let offset = 44;
-            for (let i = 0; i < pcm16.length; i++, offset += 2) {
-                view.setInt16(offset, pcm16[i], true);
-            }
-            return new Blob([buffer], { type: 'audio/wav' });
         }
 
         function toggleAiDrawer(open) {
@@ -1359,6 +1394,67 @@
                 drawer.classList.remove('-translate-x-full');
             } else {
                 drawer.classList.add('-translate-x-full');
+            }
+        }
+
+        function askAiAboutCurrentStory() {
+            const currentSound = sounds.find(s => s.id === activeSoundId);
+            closeStoryModal();
+            toggleAiDrawer(true);
+            if (currentSound) {
+                const query = `請跟我介紹「${currentSound.title}」的深度故事與排灣族文化背景。`;
+                sendAiChatMessage(query);
+            }
+        }
+
+        async function generateAndPlayStoryTts() {
+            const currentSound = sounds.find(s => s.id === activeSoundId);
+            if (!currentSound || !currentSound.story) {
+                alert("目前沒有故事內容可供朗讀！");
+                return;
+            }
+
+            const ttsBtn = document.getElementById('modalTtsBtn');
+            const ttsIcon = document.getElementById('modalTtsIcon');
+            const ttsText = document.getElementById('modalTtsText');
+
+            stopAllAudio();
+
+            ttsIcon.className = 'fa-solid fa-circle-notch animate-spin';
+            ttsText.textContent = '語音朗讀中...';
+            ttsBtn.disabled = true;
+
+            try {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(currentSound.title + "。" + currentSound.story);
+                    utterance.lang = 'zh-TW';
+                    utterance.rate = 0.95;
+                    
+                    utterance.onend = () => {
+                        ttsIcon.className = 'fa-solid fa-volume-high';
+                        ttsText.textContent = '🎙️ AI 語音朗讀故事';
+                        ttsBtn.disabled = false;
+                    };
+
+                    utterance.onerror = () => {
+                        ttsIcon.className = 'fa-solid fa-volume-high';
+                        ttsText.textContent = '🎙️ AI 語音朗讀故事';
+                        ttsBtn.disabled = false;
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                    showCopyToast("🎙️ 開始語音朗讀", "正為您朗讀長樂聲景故事！");
+                } else {
+                    alert("您的瀏覽器不支援語音朗讀功能！");
+                    ttsIcon.className = 'fa-solid fa-volume-high';
+                    ttsText.textContent = '🎙️ AI 語音朗讀故事';
+                    ttsBtn.disabled = false;
+                }
+            } catch (err) {
+                console.error("TTS Error:", err);
+                ttsIcon.className = 'fa-solid fa-volume-high';
+                ttsText.textContent = '🎙️ AI 語音朗讀故事';
+                ttsBtn.disabled = false;
             }
         }
 
@@ -1381,37 +1477,46 @@
             chatBox.appendChild(loadingDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
+            const apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                loadingDiv.className = 'bg-amber-950/70 border border-amber-700 p-3 rounded-2xl text-amber-200 mr-8 leading-relaxed';
+                loadingDiv.innerHTML = `⚠️ 尚未設定 Gemini API Key。<br><button onclick="promptForApiKey()" class="mt-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">👉 點此輸入 Gemini API Key</button>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return;
+            }
+
             try {
-                // 自動組裝目前所有聲音點位的田調文字
                 const fieldDataSummary = sounds.map((s, idx) => `
-【田調點位 ${idx + 1}】：${s.title}
+【點位 ${idx + 1}】：${s.title}
 分類：${s.category === 'interview' ? '田調採訪' : '部落生活'}
 經典引言/金句：${s.quote || '無'}
-詳細田調故事與典故紀錄：
+公開小誌故事：
 ${s.story || '無'}
+【本點位專屬訪談對話逐字稿/深度田調紀錄】：
+${s.transcript || '（暫無詳細對話紀錄）'}
 `).join('\n-------------------\n');
 
-                const extraKnowledge = (document.getElementById('fKnowledgeBase')?.value || localStorage.getItem('changle_knowledge_base') || '').trim();
+                const globalKnowledge = (document.getElementById('fKnowledgeBase')?.value || localStorage.getItem('changle_knowledge_base') || '').trim();
 
                 const systemPrompt = `你是屏東滿州鄉長樂村（排灣族聚落）的「AI長樂聲景文化解說員」。
 
 【資料來源與對話解讀指南】：
-你手頭上有「A ri vaiki 混青年團隊」在長樂村採集的田調資料庫與【深度田調訪談逐字稿知識庫】。
-注意：知識庫內的資料多為團隊訪問耆老與部落族人的「原始口語對話逐字稿」（包含 Q&A 對話、口語贅字與問答記錄）。
-請展現語意理解能力，自動從這些對話逐字稿中抓取核心事實、文化典故、傳統智慧與動人故事，過濾掉口語雜訊，整理成條理分明、溫暖生動的中文回答。
+你手頭上有「A ri vaiki 混青年團隊」在長樂村各個點位採集的【專屬訪談對話逐字稿】與【田調紀錄】。
+注意：這些逐字稿資料為團隊訪問耆老與部落族人的「原始口語對話記錄」（包含 Q&A 對話、口語贅字與問答記錄）。
+請展現強大的語意理解能力，自動從各主題對話逐字稿中抓取核心事實、文化典故、傳統智慧與動人故事，過濾掉口語雜訊，整理成條理分明、溫暖生動的中文回答。
 
 【核心回答準則】：
-1. 優先且嚴格根據提供的田調點位故事與【深度田調訪談逐字稿知識庫】內的對話紀錄進行解答。
+1. 優先且嚴格根據各點位專屬的【訪談對話逐字稿】進行精準解答。
 2. 從口語對話逐字稿中主動梳理出關鍵細節（如 VUVU 釀酒步驟、土磚屋採泥土稻草、落山風生活記憶等），消化後以清晰順暢的語氣向訪客說明。
 3. 若問題超出田調文獻範圍，可結合屏東滿州鄉與排灣族的在地文化溫暖補充，但絕不捏造與田調對話矛盾的資訊。
 4. 保持親切、溫暖、尊重大自然的部落解說員口吻。
 
-【長樂村實地田調點位紀錄 (共 ${sounds.length} 筆)】：
+【長樂村實地田調點位與個別專屬逐字稿紀錄 (共 ${sounds.length} 筆)】：
 ${fieldDataSummary}
 
-${extraKnowledge ? `【深度田調訪談逐字稿知識庫 (原始口語對話紀錄)】：\n${extraKnowledge}` : ''}`;
+${globalKnowledge ? `【全區總體背景參考資料】：\n${globalKnowledge}` : ''}`;
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
                 
                 const payload = {
                     contents: [{ parts: [{ text: messageText }] }],
@@ -1425,125 +1530,54 @@ ${extraKnowledge ? `【深度田調訪談逐字稿知識庫 (原始口語對話�
                 loadingDiv.innerHTML = `<div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i><span>AI 解說員：</span></div>${replyText}`;
             } catch (err) {
                 loadingDiv.className = 'bg-rose-950/60 border border-rose-800 p-3 rounded-2xl text-rose-300 mr-8';
-                loadingDiv.textContent = '連線失敗，請檢查網路連線或稍後再試。';
+                if (err.message.includes("401")) {
+                    loadingDiv.innerHTML = `⚠️ <b>API 金鑰驗證失敗 (401)</b><br>請檢查您的 Gemini API Key 是否正確。<br><button onclick="promptForApiKey()" class="mt-2 bg-amber-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">重新設定 API Key</button>`;
+                } else {
+                    loadingDiv.textContent = '連線失敗，請檢查網路連線或稍後再試。';
+                }
             }
             chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function askAiAboutCurrentStory() {
-            closeStoryModal();
-            toggleAiDrawer(true);
-            const activeSound = sounds.find(s => s.id === activeSoundId);
-            if (activeSound) {
-                const prompt = `請為我詳細解讀長樂聲景點位「${activeSound.title}」的背後文化與社會意義，引言是：「${activeSound.quote}」，故事內容為：${activeSound.story}`;
-                sendAiChatMessage(prompt);
-            }
-        }
-
-        async function generateAndPlayStoryTts() {
-            const activeSound = sounds.find(s => s.id === activeSoundId);
-            if (!activeSound) return;
-
-            const ttsBtn = document.getElementById('modalTtsBtn');
-            const ttsIcon = document.getElementById('modalTtsIcon');
-            const ttsText = document.getElementById('modalTtsText');
-
-            ttsIcon.className = 'fa-solid fa-circle-notch animate-spin text-amber-950';
-            ttsText.textContent = 'Gemini AI 語音合成中...';
-            ttsBtn.disabled = true;
-
-            const narrationText = `聲音主題：${activeSound.title}。金句：${activeSound.quote}。故事內容：${activeSound.story}`;
-
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
-                const payload = {
-                    contents: [{ parts: [{ text: `請用親切溫暖且清晰的語調朗讀以下長樂聲景故事：${narrationText}` }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: {
-                                prebuiltVoiceConfig: { voiceName: "Sulafat" }
-                            }
-                        }
-                    }
-                };
-
-                const data = await fetchGeminiWithBackoff(apiUrl, payload);
-                const part = data?.candidates?.[0]?.content?.parts?.[0];
-                const base64Audio = part?.inlineData?.data;
-                const mimeType = part?.inlineData?.mimeType || "audio/L16";
-
-                if (base64Audio) {
-                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
-                    
-                    const wavBlob = pcm16ToWavBlob(base64Audio, sampleRate);
-                    const audioUrl = URL.createObjectURL(wavBlob);
-
-                    stopAllAudio();
-                    audioElement = new Audio(audioUrl);
-                    audioElement.play();
-                    isPlaying = true;
-                    updatePlayIcons(true);
-
-                    audioElement.ontimeupdate = () => {
-                        if (!audioElement || window.isUserSeeking) return;
-                        const cur = audioElement.currentTime;
-                        const dur = audioElement.duration || 60;
-                        document.getElementById('playerCurrentTime').textContent = formatTime(cur);
-                        document.getElementById('playerTotalTime').textContent = formatTime(dur);
-                        document.getElementById('audioProgress').value = (cur / dur) * 100;
-                    };
-
-                    audioElement.onended = () => {
-                        isPlaying = false;
-                        updatePlayIcons(false);
-                    };
-
-                    showCopyToast("🎙️ AI 語音生成完畢", "已開始朗讀長樂聲景故事！");
-                } else {
-                    alert("語音生成失敗，請再試一次。");
-                }
-            } catch (err) {
-                console.error("Gemini TTS Error:", err);
-                alert("Gemini 語音服務暫時無法連線。");
-            } finally {
-                ttsIcon.className = 'fa-solid fa-volume-high';
-                ttsText.textContent = '🎙️ AI 語音朗讀故事';
-                ttsBtn.disabled = false;
-            }
         }
 
         async function generateAiStoryContent() {
             const title = document.getElementById('fTitle').value;
             if (!title) {
-                alert("請先填寫「聲景名稱」，例如：黃好花VUVU家釀酒。");
+                alert("請先填寫「聲景名稱」，例如：長樂文健站土磚屋共作。");
                 return;
+            }
+
+            let apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                promptForApiKey();
+                apiKey = getGeminiApiKey();
+                if (!apiKey) {
+                    alert("請先填寫 Gemini API 金鑰方可使用 AI 故事提煉功能。");
+                    return;
+                }
             }
 
             const storyTextarea = document.getElementById('fStory');
             const quoteInput = document.getElementById('fQuote');
+            const transcriptInput = document.getElementById('fTranscript').value.trim();
 
-            storyTextarea.value = "✨ Gemini AI 正在研讀對話逐字稿，提煉精華故事與金句...";
+            storyTextarea.value = "✨ Gemini AI 正在研讀本點位對話逐字稿，提煉精華故事與金句...";
 
             try {
-                const extraKnowledge = (document.getElementById('fKnowledgeBase')?.value || localStorage.getItem('changle_knowledge_base') || '').trim();
-
                 const systemPrompt = `你是屏東滿州鄉長樂村采風田調專家。
-你將獲得一份「未整理的原始訪談對話逐字稿」。請你展現分析與提煉能力，從對話中尋找與主題「${title}」相關的談話內容、生活細節或情緒脈絡。
+你將獲得一份關於「${title}」的「未整理原始訪談對話逐字稿」。請你展現分析與提煉能力，從對話中尋找談話內容、生活細節或情緒脈絡。
 
 任務要求：
 1. 提煉出一句極具感人力量或文化意涵的經典引言（引言請用【】括起來，約 15-20 字）。
 2. 將對話逐字稿中的口語細節，重新整理寫成一段流暢、文字優美且富含溫度的田調故事（約 150-200 字，適合展示於聲音小誌，展現排灣文化與長樂部落生活）。
-3. 如果逐字稿中找不到此主題的直接記載，請發揮在地文化知識為此主題創作風格相符的故事。
+3. 如果逐字稿長度較短或無記載，請發揮在地文化知識為此主題創作風格相符的故事。
 
 回傳 JSON 格式：{ "quote": "...", "story": "..." }`;
 
                 const userPrompt = `聲景主題：「${title}」
 
-${extraKnowledge ? `【可供參考提煉的深度田調訪談逐字稿/對話紀錄】：\n${extraKnowledge}` : '（目前尚無額外逐字稿，請依據主題撰寫）'}`;
+${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${transcriptInput}` : '（目前尚無填寫專屬逐字稿，請依據主題撰寫）'}`;
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: userPrompt }] }],
                     generationConfig: {
@@ -1566,16 +1600,25 @@ ${extraKnowledge ? `【可供參考提煉的深度田調訪談逐字稿/對話�
                     const result = JSON.parse(jsonText);
                     quoteInput.value = result.quote || "";
                     storyTextarea.value = result.story || "";
-                    showCopyToast("✨ AI 提煉完成！", "已從訪談逐字稿對話中整理出故事與金句。");
+                    showCopyToast("✨ AI 提煉完成！", "已從本點位訪談逐字稿對話中整理出故事與金句。");
                 }
             } catch (err) {
                 console.error("Gemini Story Generator Error:", err);
                 storyTextarea.value = "";
-                alert("Gemini AI 故事生成失敗，請稍後再試。");
+                if (err.message.includes("401")) {
+                    alert("Gemini API 金鑰驗證失敗 (401)，請重新檢查或設定 API Key。");
+                    promptForApiKey();
+                } else {
+                    alert("Gemini AI 故事生成失敗，請稍後再試。");
+                }
             }
         }
 
-        // Global function bindings
+        /* 綁定全域函式 */
+        window.getGeminiApiKey = getGeminiApiKey;
+        window.saveGeminiApiKey = saveGeminiApiKey;
+        window.saveGeminiApiKeyFromAdmin = saveGeminiApiKeyFromAdmin;
+        window.promptForApiKey = promptForApiKey;
         window.closeWelcomeOverlay = closeWelcomeOverlay;
         window.toggleAdminPanel = toggleAdminPanel;
         window.switchMobileView = switchMobileView;
@@ -1617,19 +1660,19 @@ ${extraKnowledge ? `【可供參考提煉的深度田調訪談逐字稿/對話�
         window.promptDelete = promptDelete;
         window.closeDeleteModal = closeDeleteModal;
         window.confirmDelete = confirmDelete;
-        window.resetSoundsToDefault = resetSoundsToDefault;
         window.toggleAiDrawer = toggleAiDrawer;
         window.sendAiChatMessage = sendAiChatMessage;
         window.askAiAboutCurrentStory = askAiAboutCurrentStory;
         window.generateAndPlayStoryTts = generateAndPlayStoryTts;
         window.generateAiStoryContent = generateAiStoryContent;
         window.saveKnowledgeBase = saveKnowledgeBase;
-        window.handleTxtUpload = handleTxtUpload;
+        window.handleItemTxtUpload = handleItemTxtUpload;
 
         window.onload = function() {
             initMap();
             renderWelcomeOverlay();
             loadKnowledgeBase();
+            updateApiKeyUIStatus();
             renderApp();
             setTimeout(() => {
                 resetMapCenter();
