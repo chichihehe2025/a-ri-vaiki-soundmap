@@ -332,7 +332,7 @@
                         <span>JSON 資料同步管理</span>
                     </h4>
                 </div>
-                <p class="text-[10px] text-slate-400">新增或修改完點位後，點擊下方按鈕複製完整 JSON 資料，更新程式碼即可上傳 Netlify 生效。</p>
+                <p class="text-[10px] text-slate-400">新增或修改完點位後，點擊下方按鈕複製完整 JSON 資料，更新程式碼即可上傳 Netlify / GitHub 生效。</p>
                 <div class="flex space-x-2 pt-1">
                     <button onclick="copyCurrentJSON()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 rounded-xl transition-colors shadow-sm flex items-center justify-center space-x-1.5">
                         <i class="fa-solid fa-copy"></i>
@@ -398,6 +398,7 @@
                 </button>
             </div>
 
+            <!-- Sound Form -->
             <form id="soundForm" onsubmit="handleFormSubmit(event)" class="space-y-3.5 pt-1">
                 <input type="hidden" id="editId" value="">
 
@@ -604,7 +605,7 @@
             btnText: '進入地圖聆聽長樂聲景'
         };
 
-        /* 最新長樂村聲音點位種子資料 */
+        /* 最新長樂村聲音點位種子資料 (含使用者更新後之內容) */
         const INITIAL_SOUND_SEEDS = [
             {
                 "id": "s_1787251948607",
@@ -612,10 +613,10 @@
                 "category": "interview",
                 "lat": 22.074084,
                 "lng": 120.825932,
-                "photoUrl": "https://www.dropbox.com/scl/fi/4ipc2shcgghxeh0blv8bb/.jpg?rlkey=u70bpzbz7m4mqwonxih44jpil&st=yum03d0w&raw=1",
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/4ipc2shcgghxeh0blv8bb/.jpg?rlkey=u70bpzbz7m4mqwonxih44jpil&st=yum03d0w&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/rmm09zgwsco6ci6p1ba6b/.mp3?rlkey=ia0xwpf4k06pxj7qjys5m2f1i&st=ispmdr6e&raw=1",
-                "quote": "【 長樂文健站土磚屋共作 】",
-                "story": "在長樂村文健站，老人家與部落族人聚在一起，合力採集泥土、稻草與風乾材料，一磚一瓦重現排灣族傳統土磚屋的建築智慧與凝聚力。"
+                "quote": "【 疊土磚要抓準水平，像梳理頭髮般整齊 】",
+                "story": "土磚屋是土地共息的築屋手藝。每一塊土磚都需精準測量，長四十、寬二十五公分，疊砌時還得襯入竹片強化骨架。\n\nVUVU叮嚀，地基必須墊高，才不會使落雨融了土牆。最美的是那以檳榔樹為樑、茅草為頂的堅持，待屋頂鋪齊後，還要如修剪秀髮般理出流暢的線條。這不只是一座遮風避雨的土磚屋，更是長樂部落耆老們用一生閱歷，將泥土與汗水揉合而成的集體記憶，讓族人冬暖夏涼的智慧，在當代的陽光下重新發亮。"
             },
             {
                 "id": "s_1787230853469",
@@ -630,7 +631,7 @@
             }
         ];
 
-        /* Embedded Gemini API Key directly for active AI features */
+        /* Embedded Gemini API Key */
         const GEMINI_API_KEY = "AQ.Ab8RN6IWLoYHwvNZx7gWHok43jj2yI6MHO62HaxjeZe2HXMiZA";
 
         /* Local State */
@@ -1256,6 +1257,7 @@
             document.getElementById('wBtnText').value = welcomeConfig.btnText;
         }
 
+        /* 田調知識庫管理函式 */
         function loadKnowledgeBase() {
             const kbText = localStorage.getItem('changle_knowledge_base') || '';
             const el = document.getElementById('fKnowledgeBase');
