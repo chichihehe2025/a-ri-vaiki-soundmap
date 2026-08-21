@@ -124,12 +124,6 @@
         </div>
 
         <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-            <button id="openAiGuideBtn" onclick="toggleAiDrawer(true)" class="flex items-center space-x-1 bg-emerald-800 hover:bg-emerald-700 active:bg-emerald-900 border border-emerald-600 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-100 transition-colors shadow-sm min-h-[36px] whitespace-nowrap shrink-0">
-                <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
-                <span class="hidden sm:inline">AI 文化解說員</span>
-                <span class="sm:hidden whitespace-nowrap">AI 導覽</span>
-            </button>
-
             <button id="openAdminBtn" onclick="toggleAdminPanel(true)" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-200 transition-colors shadow-sm min-h-[36px] whitespace-nowrap shrink-0">
                 <i class="fa-solid fa-sliders text-emerald-400 text-xs"></i>
                 <span class="hidden sm:inline">管理後台</span>
@@ -269,19 +263,9 @@
             </div>
 
             <div class="p-4 bg-slate-50 border-t border-slate-100 shrink-0 space-y-2">
-                <div class="flex space-x-2">
-                    <button id="modalPlayBtn" onclick="togglePlayPauseFromModal()" class="flex-1 bg-slate-900 hover:bg-emerald-600 text-white px-3 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1.5">
-                        <i class="fa-solid fa-play" id="modalPlayIcon"></i>
-                        <span id="modalPlayText">收聽聲音</span>
-                    </button>
-                    <button id="modalTtsBtn" onclick="generateAndPlayStoryTts()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 px-3 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1.5 shadow-sm">
-                        <i class="fa-solid fa-volume-high" id="modalTtsIcon"></i>
-                        <span id="modalTtsText">🎙️ 語音朗讀故事</span>
-                    </button>
-                </div>
-                <button onclick="askAiAboutCurrentStory()" class="w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-comments text-emerald-700"></i>
-                    <span>向 AI 詢問此聲音的背景故事與文化意涵</span>
+                <button id="modalPlayBtn" onclick="togglePlayPauseFromModal()" class="w-full bg-slate-900 hover:bg-emerald-600 text-white px-3 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-play" id="modalPlayIcon"></i>
+                    <span id="modalPlayText">收聽聲音</span>
                 </button>
             </div>
         </div>
@@ -315,26 +299,6 @@
         </div>
 
         <div id="adminMainScreen" class="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-5 hidden text-left">
-            
-            <!-- Gemini API Key Config Card -->
-            <div class="bg-slate-800/90 border border-amber-500/50 p-3.5 rounded-2xl space-y-2">
-                <div class="flex items-center justify-between">
-                    <h4 class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
-                        <i class="fa-solid fa-key"></i>
-                        <span>AI 解說員授權金鑰 (Gemini API Key)</span>
-                    </h4>
-                    <span id="apiKeyStatusBadge" class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">已預設載入</span>
-                </div>
-                <p class="text-[10px] text-slate-300 leading-relaxed">
-                    本私有儲存庫已內建預設 API 金鑰。若您有新的金鑰（如 AIzaSy... 開頭），可在此貼上更換。
-                </p>
-                <div class="flex items-center space-x-2 pt-1">
-                    <input type="text" id="adminApiKeyInput" placeholder="貼上您的 Gemini API 金鑰 (例如以 AIzaSy... 開頭)" class="flex-1 px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400 font-mono">
-                    <button onclick="saveAdminApiKeyFromInput()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl transition-colors shrink-0">
-                        儲存金鑰
-                    </button>
-                </div>
-            </div>
 
             <div class="bg-slate-800/90 border border-emerald-500/40 p-3.5 rounded-2xl space-y-2">
                 <div class="flex items-center justify-between">
@@ -425,12 +389,12 @@
                     <div class="flex items-center justify-between">
                         <label class="block text-xs font-bold text-amber-300 flex items-center gap-1">
                             <i class="fa-solid fa-file-lines"></i>
-                            <span>本點位專屬 — AI 深度田調逐字稿 / 補充資料 *</span>
+                            <span>本點位專屬 — 訪談逐字稿 / 補充資料 *</span>
                         </label>
-                        <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">AI 專用不公開</span>
+                        <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">AI 提煉專用</span>
                     </div>
                     <p class="text-[10px] text-slate-400 leading-relaxed">
-                        請在此貼入<b>本點位主題的原始訪問對話逐字稿</b>。小誌不展現此內容，但 AI 解說員與故事生成器會自動讀取它！
+                        請在此貼入<b>本點位主題的原始訪問對話逐字稿</b>。貼入或上傳檔案後，點擊「✨ AI 提煉小誌故事」即可自動生成精華故事與經典金句！
                     </p>
                     <textarea id="fTranscript" rows="6" placeholder="請在此貼入本點位的訪談逐字稿對話、詳細田調筆記..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400 resize-y min-h-[100px] font-mono leading-relaxed"></textarea>
                     
@@ -589,7 +553,6 @@
     </div>
 
     <script>
-        // 🔑 全站預設連線金鑰：
         const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6LO5gASy9nhmbsVCQDwRngJe8gJuVu4fOK4X27oT8zCRg";
 
         function getGeminiApiKey() {
@@ -642,42 +605,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/3rez9trr3yuvjsobhe821/.jpg?rlkey=thr528r0w84euptcwtp47ydoa&st=g49euf94&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/v8vyllbgv12boo7s8w0qq/.mp3?rlkey=fegroa20yu3ad8rwupx3taw81&st=fuo5yx0r&raw=1",
                 "quote": "【 不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事 】",
-                "transcript": `屏東長樂教會位於屏東縣滿州鄉長樂村，是一間隸屬台灣基督長老教會排灣中會的鄉村支會，設立於1955年4月1日，長年於恆春半島的長樂部落陪伴與服務當地居民。
-長樂教會，前身又名「東海教會」設於於1955年，期是由北排灣的信徒移居於牡丹鄉旭海村的東海路；然而，1977年因該地被政府規劃為國防重地，遭到強迫徵收土地，當地居民被迫離開家園。
-屏東縣滿州鄉的長樂教會（Ciulaku 教會）宛如一顆珍珠，靜靜鑲嵌在恆春半島的土地上。這間教會的存在，不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事。
-
-東海的記憶：被迫遷徙的原點
-1951年，來自三地村、達瓦達旺、舊好茶和德文等部落的族人遷至牡丹鄉旭海村，並建立了東海教會。對於這些已然接受基督信仰的族人而言，教會不僅是信仰的象徵，更是教育和資訊的中心。然而，1974年，國防部的計劃改變了一切。中科院九鵬基地的設立，迫使族人再度遷徙。在戒嚴時期的不安氛圍下，語言的隔閡與權力的不對等使他們經歷了巨大的迷惘與創傷。
-
-長樂的重生：建立新家園
-遷徙至滿州鄉長樂村後，部分族人決定重建他們的信仰中心。1977年，一座新的教堂開始籌建，並於1980年12月正式成立長樂教會。在這段歷史中，杜碧玉女士的名字被人銘記，她與其他信徒一起，用信仰支撐著族人面對失落的痛楚。
-
-此外，事工的推展中，諸如馬卡巴‧阿勇（Makaba Ayung）與哈達‧拉伊（Hada Rai）這些核心人物，也在其中扮演了重要角色。他們的領導與堅持，成為信徒間彼此支持的精神支柱。
-事工與挑戰：不安的現況
-長樂教會的信徒來自不同族群，分散且混雜。社會挑戰與內部資源的匱乏使教會舉步維艱。例如，土地登記問題自1977年教堂成立以來，一直是族人關注的焦點。歷經多年的協調與努力，該問題終於在2020年11月成功解決，象徵著族人長期努力的成果與社會正義的一小步。
-
-然而，傳道人的頻繁輪替仍然是一項挑戰，導致教會難以制定長期計劃，信徒的參與度也因此受到影響。
-
-轉型正義：修復與反思
-近年來，長樂教會積極推動轉型正義，試圖釐清遷徙的歷史真相，並修復族群記憶中的傷痕。2021年，教會舉行了設教40週年暨紀念東海教會65週年的感恩禮拜，這不僅是對過去的追溯，也是對未來的展望。紀念禮拜後的和解音樂會，透過音樂撫慰族人，試圖將痛苦化為希望。
-
-這些活動的背後，有著傳道師法法吾妮‧拉樂歌安（Vavauni Ljaljegean）與蔣記剛（Tjanubak Ljaljegean）的身影。他們堅信，歷史不僅僅是過去的傷痕，更是一個學習與成長的契機。
-
-社區連結與未來展望
-長樂教會的使命並不限於信仰傳播，它也嘗試成為社區的支持中心。婦女刺繡與傳統美食的教學，親職講座與課業輔導，都是教會事工的方向。透過與地方學校及公所的合作，教會希望拉近與社區的關係。過去的戶外愛宴，也展現了打破族群隔閡的努力。
-
-此外，長樂教會與其他部落教會密切合作，組成“部落教室”，推動文化保存與課業輔導等工作。這種跨教會的聯合事工，不僅增進了教會間的連結，也使族人在共同的努力中尋回了自信。
-
-歷史的教誨：在信仰中尋找力量
-如台灣基督長老教會總會原宣幹事日依‧達里瑪勞（Rii Taljimaraw）牧師所說，「透過歷史，族人能知道上帝的旨意和上帝國。」 長樂教會的歷史是一部族群在台灣社會變遷中掙扎與信仰的編年史。他們從傷痛中站起，並用信仰作為內在的力量，繼續為下一代鋪路。
-
-長樂教會大事紀
-1951年：居民來自 Timur（三地村）、Tjavatjavang（達瓦達旺）、Kucapungane（舊好茶）、Tjukuvulj（德文） 等部落，遷徙至牡丹鄉旭海村建立東海教會。
-1974年：因國防部興建中科院九鵬基地，東海教會居民被迫再次遷徙。
-1977年：遷徙至滿州鄉長樂村的部分居民決定重建教會。
-1980年12月：長樂村教會正式獻堂成立長樂教會（Ciulaku 教會）。
-2020年11月23日：教會土地所有權問題解決，土地成功登記於教會名下。
-2021年12月11日：舉行設教40週年暨紀念東海教會65週年感恩禮拜與和解音樂會。`,
+                "transcript": "屏東長樂教會位於屏東縣滿州鄉長樂村，是一間隸屬台灣基督長老教會排灣中會的鄉村支會，設立於1955年4月1日，長年於恆春半島的長樂部落陪伴與服務當地居民。\n長樂教會，前身又名「東海教會」設於於1955年，期是由北排灣的信徒移居於牡丹鄉旭海村的東海路；然而，1977年因該地被政府規劃為國防重地，遭到強迫徵收土地，當地居民被迫離開家園。\n屏東縣滿州鄉的長樂教會（Ciulaku 教會）宛如一顆珍珠，靜靜鑲嵌在恆春半島的土地上。這間教會的存在，不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事。\n\n東海的記憶：被迫遷徙的原點\n1951年，來自三地村、達瓦達旺、舊好茶和德文等部落的族人遷至牡丹鄉旭海村，並建立了東海教會。對於這些已然接受基督信仰的族人而言，教會不僅是信仰的象徵，更是教育和資訊的中心。然而，1974年，國防部的計劃改變了一切。中科院九鵬基地的設立，迫使族人再度遷徙。在戒嚴時期的不安氛圍下，語言的隔閡與權力的不對等使他們經歷了巨大的迷惘與創傷。\n\n長樂的重生：建立新家園\n遷徙至滿州鄉長樂村後，部分族人決定重建他們的信仰中心。1977年，一座新的教堂開始籌建，並於1980年12月正式成立長樂教會。在這段歷史中，杜碧玉女士的名字被人銘記，她與其他信徒一起，用信仰支撐著族人面對失落的痛楚。\n\n此外，事工的推展中，諸如馬卡巴‧阿勇（Makaba Ayung）與哈達‧拉伊（Hada Rai）這些核心人物，也在其中扮演了重要角色。他們的領導與堅持，成為信徒間彼此支持的精神支柱。\n事工與挑戰：不安的現況\n長樂教會的信徒來自不同族群，分散且混雜。社會挑戰與內部資源的匱乏使教會舉步維艱。例如，土地登記問題自1977年教堂成立以來，一直是族人關注的焦點。歷經多年的協調與努力，該問題終於在2020年11月成功解決，象徵著族人長期努力的成果與社會正義的一小步。\n\n然而，傳道人的頻繁輪替仍然是一項挑戰，導致教會難以制定長期計劃，信徒的參與度也因此受到影響。\n\n轉型正義：修復與反思\n近年來，長樂教會積極推動轉型正義，試圖釐清遷徙的歷史真相，並修復族群記憶中的傷痕。2021年，教會舉行了設教40週年暨紀念東海教會65週年的感恩禮拜，這不僅是對過去的追溯，也是對未來的展望。紀念禮拜後的和解音樂會，透過音樂撫慰族人，試圖將痛苦化為希望。\n\n這些活動的背後，有著傳道師法法吾妮‧樂歌安（Vavauni Ljaljegean）與蔣記剛（Tjanubak Ljaljegean）的身影。他們堅信，歷史不僅僅是過去的傷痕，更是一個學習與成長的契機。\n\n社區連結與未來展望\n長樂教會的使命並不限於信仰傳播，它也嘗試成為社區的支持中心。婦女刺繡與傳統美食的教學，親職講座與課業輔導，都是教會事工的方向。透過與地方學校及公所的合作，教會希望拉近與社區的關係。過去的戶外愛宴，也展現了打破族群隔閡的努力。\n\n此外，長樂教會與其他部落教會密切合作，組成“部落教室”，推動文化保存與課業輔導等工作。這種跨教會的聯合事工，不僅增進了教會間的連結，也使族人在共同的努力中尋回了自信。\n\n歷史的教誨：在信仰中尋找力量\n如台灣基督長老教會總會原宣幹事日依‧達里瑪勞（Rii Taljimaraw）牧師所說，「透過歷史，族人能知道上帝的旨意和上帝國。」 長樂教會的歷史是一部族群在台灣社會變遷中掙扎與信仰的編年史。他們從傷痛中站起，並用信仰作為內在的力量，繼續為下一代鋪路。\n\n長樂教會大事紀\n1951年：居民來自 Timur（三地村）、Tjavatjavang（達瓦達旺）、Kucapungane（舊好茶）、Tjukuvulj（德文） 等部落，遷徙至牡丹鄉旭海村建立東海教會。\n1974年：因國防部興建中科院九鵬基地，東海教會居民被迫再次遷徙。\n1977年：遷徙至滿州鄉長樂村的部分居民決定重建教會。\n1980年12月：長樂村教會正式獻堂成立長樂教會（Ciulaku 教會）。\n2020年11月23日：教會土地所有權問題解決，土地成功登記於教會名下。\n2021年12月11日：舉行設教40週年暨紀念東海教會65週年感恩禮拜與和解音樂會。",
                 "story": "位於屏東縣滿州鄉的長樂教會（Ciulaku 教會），隸屬台灣基督長老教會排灣中會，前身為1955年設於牡丹鄉旭海村的「東海教會」。這是一座記錄著族人遷徙、失落與重建的生命教堂。\n\n1974年因國防部興建九鵬基地，原居於旭海的部落族人被迫離鄉。1977年部分族人於長樂村重建信仰中心，並於1980年正式獻堂。歷經多年努力，教會不僅在2020年解決長期困擾的土地登記問題，更積極推動轉型正義與歷史調查，辦理尋根與感恩禮拜以修復族群創傷。\n\n如今，長樂教會除持續宣教，亦推動文化保存、部落教室與課業輔導，成為凝聚社區與連結部落的精神支柱。"
             },
             {
@@ -701,10 +629,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=bx4declm&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/v67k4btl5x0gg2jws644e/.mp3?rlkey=xvx4vuv051igu9ja4qahkuwqi&st=17vbj1b7&raw=1",
                 "quote": "【 這條路是祖先揀選的 】",
-                "transcript": `採訪主題：巫師遷移史、祈福儀式
-黃福妹巫師是長樂部落的首席巫師，80 多歲，早期從四林部落遷至長樂部落。
-隔代傳承傳統，由阿嬤傳授巫師天命。法器為豬肉、豬骨、胡瓜、小刀與芭樂葉。
-祈福經文使用排灣族語。當初經歷醫學無法診斷的病痛，經舊巫師指點確認承接巫師使命後病痛不藥而癒。`,
+                "transcript": "採訪主題：巫師遷移史、祈福儀式\n黃福妹巫師是長樂部落的首席巫師，80 多歲，早期從四林部落遷至長樂部落。\n隔代傳承傳統，由阿嬤傳授巫師天命。法器為豬肉、豬骨、胡瓜、小刀與芭樂葉。\n祈福經文使用排灣族語。當初經歷醫學無法診斷的病痛，經舊巫師指點確認承接巫師使命後病痛不藥而癒。",
                 "story": "長樂首席巫師黃福妹，她從牡丹四林嫁過來，原本只是尋常農婦，直到那場醫學查不出病因的長久病痛，才揭示了她身為「傳承者」的宿命。\n\n遵循隔代傳承的傳統，她接下了阿嬤留下的法器，學會用豬骨、芭樂葉與胡瓜與靈溝通。無論是部落祭儀、新車祈福，甚至是遠赴台北的喪禮，她以排灣族語吟唱著古老經文，將不安轉化為慰藉。\n\n對她而言，巫師不只是身份，更是與祖先的靈魂契約，讓病痛在服務中消散，也讓文化在傳承中延續。"
             },
             {
@@ -716,10 +641,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/4ipc2shcgghxeh0blv8bb/.jpg?rlkey=u70bpzbz7m4mqwonxih44jpil&st=yum03d0w&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/rmm09zgwsco6ci6p1ba6b/.mp3?rlkey=ia0xwpf4k06pxj7qjys5m2f1i&st=ispmdr6e&raw=1",
                 "quote": "【 疊土磚要抓準水平，像梳理頭髮般整齊 】",
-                "transcript": `土磚屋模型尺寸寬25公分、長40公分、高15-20公分。
-基礎用石頭配合沙子與水泥，從地面墊高20-40公分預防雨水融化土牆。
-每層間距一至兩公分，夾入竹片強化結構力學。
-屋頂早期採用檳榔樹與木頭作樑，鋪設茅草並修剪整齊，外牆可用牛糞或水泥粉刷。`,
+                "transcript": "土磚屋模型尺寸寬25公分、長40公分、高15-20公分。\n基礎用石頭配合沙子與水泥，從地面墊高20-40公分預防雨水融化土牆。\n每層間距一至兩公分，夾入竹片強化結構力學。\n屋頂早期採用檳榔樹與木頭作樑，鋪設茅草並修剪整齊，外牆可用牛糞或水泥粉刷。",
                 "story": "土磚屋是土地共息的築屋手藝。每一塊土磚都需精準測量，長四十、寬二十五公分，疊砌時還得襯入竹片強化骨架。\n\nVUVU叮嚀，地基必須墊高，才不會使落雨融了土牆。最美的是那以檳榔樹為樑、茅草為頂的堅持，待屋頂鋪齊後，還要如修剪秀髮般理出流暢的線條。這不只是一座遮風避雨的土磚屋，更是長樂部落耆老們用一生閱歷，將泥土與汗水揉合而成的集體記憶，讓族人冬暖夏涼的智慧，在當代的陽光下重新發亮。"
             },
             {
@@ -731,8 +653,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/2dlkxp9uqkzsrg5ufrky0/.jpg?rlkey=0zxcak1bv1jkairptgkk58b82&st=0jktnky8&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/8e4yu29o13kzkw9vuwi8n/.mp3?rlkey=ha359jbub3q4qihnd3chvnllg&st=ooew1ynn&raw=1",
                 "quote": "【 釀造是豐收之後的事 】",
-                "transcript": `團隊訪問紀錄：黃好花VUVU家傳統釀酒
-糯米蒸熟，酒麴曬乾碾碎。酒甕先以熱水及植物pawl沖洗殺菌去味，發酵後香醇可口。`,
+                "transcript": "團隊訪問紀錄：黃好花VUVU家傳統釀酒\n糯米蒸熟，酒麴曬乾碾碎。酒甕先以熱水及植物pawl沖洗殺菌去味，發酵後香醇可口。",
                 "story": "VUVU告訴我們，在部落裡，釀酒不只是一種技術，更是一種對於在地風土的濃縮。\n\n從蒸糯米開始，我們一步步跟著VUVU的動作，將米白色的酒麴曬乾後碾碎，以徹底釋放酵母的活力；接著把pawl與熱水澆注在甕裡，使其產生香氣並達到殺菌的效果，最後再倒入準備好的糯米並封存等待。"
             }
         ];
@@ -853,8 +774,6 @@
         }
 
         function renderApp() {
-            updateApiKeyBadge(true);
-
             const cntAll = sounds.length;
             const cntInt = sounds.filter(s => s.category === 'interview').length;
             const cntVil = sounds.filter(s => s.category === 'village').length;
@@ -985,9 +904,6 @@
                 audioElement.load();
                 audioElement = null;
             }
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
             isPlaying = false;
             updatePlayIcons(false);
             document.getElementById('audioErrorBanner').classList.add('hidden');
@@ -1117,54 +1033,6 @@
             document.getElementById('storyModal').classList.add('hidden');
         }
 
-        function askAiAboutCurrentStory() {
-            closeStoryModal();
-            toggleAiDrawer(true);
-            const s = sounds.find(x => x.id === activeSoundId);
-            if (s) {
-                sendAiChatMessage(`請為我詳細介紹「${s.title}」的背景故事、田調紀錄與文化意涵。`);
-            }
-        }
-
-        function generateAndPlayStoryTts() {
-            const s = sounds.find(x => x.id === activeSoundId);
-            if (!s || !s.story) return;
-
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(s.story);
-                utterance.lang = 'zh-TW';
-                utterance.rate = 0.95;
-                
-                const ttsIcon = document.getElementById('modalTtsIcon');
-                const ttsText = document.getElementById('modalTtsText');
-
-                utterance.onstart = () => {
-                    if (ttsIcon) ttsIcon.className = 'fa-solid fa-circle-notch animate-spin';
-                    if (ttsText) ttsText.textContent = '朗讀中...';
-                };
-
-                utterance.onend = utterance.onerror = () => {
-                    if (ttsIcon) ttsIcon.className = 'fa-solid fa-volume-high';
-                    if (ttsText) ttsText.textContent = '🎙️ 語音朗讀故事';
-                };
-
-                window.speechSynthesis.speak(utterance);
-                showCopyToast("🎙️ 開始語音朗讀", "正為您朗讀此點位的故事內容。");
-            } else {
-                alert("您的瀏覽器不支援語音朗讀功能。");
-            }
-        }
-
-        function toggleAiDrawer(open) {
-            const drawer = document.getElementById('aiDrawer');
-            if (open) {
-                drawer.classList.remove('-translate-x-full');
-            } else {
-                drawer.classList.add('-translate-x-full');
-            }
-        }
-
         async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
             let delay = 1000;
             for (let i = 0; i < maxRetries; i++) {
@@ -1193,72 +1061,6 @@
                     delay *= 2;
                 }
             }
-        }
-
-        async function sendAiChatMessage(prefilledPrompt) {
-            const apiKey = getGeminiApiKey();
-
-            const input = document.getElementById('aiChatInput');
-            const chatBox = document.getElementById('aiChatBox');
-            const messageText = prefilledPrompt || input.value.trim();
-            if (!messageText) return;
-
-            if (!prefilledPrompt) input.value = '';
-
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'bg-emerald-900/60 border border-emerald-700/50 p-3 rounded-2xl text-emerald-100 text-right ml-8';
-            userMsgDiv.textContent = messageText;
-            chatBox.appendChild(userMsgDiv);
-
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'bg-slate-800 border border-slate-700 p-3 rounded-2xl text-amber-300 mr-8 flex items-center space-x-2';
-            loadingDiv.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i><span>AI 解說員解讀對話逐字稿中...</span>`;
-            chatBox.appendChild(loadingDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                const fieldDataSummary = sounds.map((s, idx) => `
-【點位 ${idx + 1}】：${s.title}
-分類：${s.category === 'interview' ? '田調採訪' : '部落生活'}
-經典引言/金句：${s.quote || '無'}
-公開小誌故事：
-${s.story || '無'}
-【本點位專屬訪談對話逐字稿/深度田調紀錄】：
-${s.transcript || '（暫無詳細對話紀錄）'}
-`).join('\n-------------------\n');
-
-                const systemPrompt = `你是屏東滿州鄉長樂村（排灣族聚落）的「AI長樂聲景文化解說員」。
-請優先且嚴格根據團隊採集的長樂村各點位【專屬訪談對話逐字稿】與【田調紀錄】進行解讀與回答。
-解答時以親切、溫暖、尊重大自然的口吻說明部落的風土與文化故事。
-
-【實地田調點位與逐字稿庫】：
-${fieldDataSummary}`;
-
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-                
-                const payload = {
-                    contents: [{ parts: [{ text: messageText }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                };
-
-                const data = await fetchGeminiWithBackoff(apiUrl, payload);
-                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，無法取得導覽資訊，請稍後再試。";
-
-                loadingDiv.className = 'bg-slate-800 border border-slate-700 p-3.5 rounded-2xl text-slate-200 mr-8 leading-relaxed whitespace-pre-line';
-                loadingDiv.innerHTML = `<div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-robot"></i><span>AI 解說員：</span></div>${replyText}`;
-            } catch (err) {
-                if (err.message === "AUTH_ERROR") {
-                    loadingDiv.className = 'bg-rose-950/60 border border-rose-800 p-3.5 rounded-2xl text-rose-300 mr-8 space-y-2';
-                    loadingDiv.innerHTML = `
-                        <p class="font-bold">⚠️ Gemini API 金鑰連線未成功。</p>
-                        <p class="text-[11px] text-rose-200">請確認程式碼中最上方的 DEFAULT_GEMINI_KEY 是否已填入正確的 AIzaSy... 開頭金鑰。</p>
-                    `;
-                } else {
-                    loadingDiv.className = 'bg-rose-950/60 border border-rose-800 p-3 rounded-2xl text-rose-300 mr-8';
-                    loadingDiv.textContent = '連線服務忙碌中，請稍後再試。';
-                }
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         async function generateAiStoryContent() {
@@ -1358,8 +1160,6 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
             const panel = document.getElementById('adminPanel');
             if (open) {
                 panel.classList.remove('translate-x-full');
-                const keyInput = document.getElementById('adminApiKeyInput');
-                if (keyInput) keyInput.value = localStorage.getItem('changle_gemini_key') || '';
             } else {
                 panel.classList.add('translate-x-full');
                 clearPickerMarker();
@@ -1401,10 +1201,10 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
                     renderApp();
                     showCopyToast("JSON 資料匯入成功！", `已載入 ${sounds.length} 筆點位。`);
                 } else {
-                    alert("格式不符合，需為 JSON 陣列。");
+                    showCopyToast("匯入錯誤", "格式不符合，需為 JSON 陣列。");
                 }
             } catch (e) {
-                alert("JSON 解析失敗，請確認內容格式是否正確。");
+                showCopyToast("匯入錯誤", "JSON 解析失敗，請確認內容格式是否正確。");
             }
         }
 
@@ -1517,7 +1317,7 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
                 const text = e.target.result;
                 const el = document.getElementById('fTranscript');
                 if (el) el.value = text;
-                showCopyToast("📄 已成功載入本點位 .txt 逐字稿！", "可點擊「✨ AI 提煉」自動生成故事與金句。");
+                showCopyToast("📄 已成功載入本點位 .txt 逐字稿！");
             };
             reader.readAsText(file, 'UTF-8');
         }
@@ -1597,10 +1397,6 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
         window.promptDelete = promptDelete;
         window.closeDeleteModal = closeDeleteModal;
         window.confirmDelete = confirmDelete;
-        window.toggleAiDrawer = toggleAiDrawer;
-        window.sendAiChatMessage = sendAiChatMessage;
-        window.askAiAboutCurrentStory = askAiAboutCurrentStory;
-        window.generateAndPlayStoryTts = generateAndPlayStoryTts;
         window.generateAiStoryContent = generateAiStoryContent;
         window.handleItemTxtUpload = handleItemTxtUpload;
         window.saveAdminApiKeyFromInput = saveAdminApiKeyFromInput;
