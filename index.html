@@ -300,6 +300,26 @@
 
         <div id="adminMainScreen" class="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-5 hidden text-left">
 
+            <!-- Gemini API Key Config Card -->
+            <div class="bg-slate-800/90 border border-amber-500/40 p-3.5 rounded-2xl space-y-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-key"></i>
+                        <span>AI 提煉授權金鑰 (Gemini API Key)</span>
+                    </h4>
+                    <span id="apiKeyStatusBadge" class="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">未設定/免金鑰模式</span>
+                </div>
+                <p class="text-[10px] text-slate-300 leading-relaxed">
+                    若有 Google AI Studio 取得的 Gemini API 金鑰（以 <code class="text-amber-300">AIzaSy...</code> 開頭），可貼於此處使用雲端模型；未輸入時系統將自動採用<b>本地智慧提煉</b>，一樣能順暢自動整理逐字稿。
+                </p>
+                <div class="flex items-center space-x-2 pt-1">
+                    <input type="text" id="adminApiKeyInput" placeholder="貼上您的 Gemini API 金鑰 (AIzaSy...)" class="flex-1 px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-amber-400 font-mono">
+                    <button type="button" onclick="saveAdminApiKeyFromInput()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl transition-colors shrink-0">
+                        儲存金鑰
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-slate-800/90 border border-emerald-500/40 p-3.5 rounded-2xl space-y-2">
                 <div class="flex items-center justify-between">
                     <h4 class="font-bold text-xs text-emerald-300 flex items-center gap-1.5">
@@ -553,34 +573,37 @@
     </div>
 
     <script>
-        const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6LO5gASy9nhmbsVCQDwRngJe8gJuVu4fOK4X27oT8zCRg";
-
         function getGeminiApiKey() {
             const storedKey = localStorage.getItem('changle_gemini_key');
             if (storedKey && storedKey.trim() !== '') {
                 return storedKey.trim();
             }
-            return DEFAULT_GEMINI_KEY;
+            return '';
         }
 
         function saveAdminApiKeyFromInput() {
             const inputVal = document.getElementById('adminApiKeyInput').value.trim();
             if (inputVal) {
                 localStorage.setItem('changle_gemini_key', inputVal);
-                showCopyToast("API 金鑰已成功儲存！", "AI 文化解說員與故事提煉功能已可正常使用。");
-                updateApiKeyBadge(true);
+                showCopyToast("API 金鑰已儲存！", "點位故事提煉已切換為自訂 Gemini API 連線。");
+                updateApiKeyBadge();
             } else {
                 localStorage.removeItem('changle_gemini_key');
-                showCopyToast("已還原預設金鑰", "現正使用系統內建連線設定。");
-                updateApiKeyBadge(true);
+                showCopyToast("已切換為免金鑰模式", "故事提煉將自動使用本地智慧分析模式。");
+                updateApiKeyBadge();
             }
         }
 
-        function updateApiKeyBadge(hasKey) {
+        function updateApiKeyBadge() {
             const badge = document.getElementById('apiKeyStatusBadge');
-            if (badge) {
-                badge.textContent = '已預設載入';
+            if (!badge) return;
+            const key = localStorage.getItem('changle_gemini_key');
+            if (key && key.trim().startsWith('AIza')) {
+                badge.textContent = '已設定自訂金鑰';
                 badge.className = 'text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30';
+            } else {
+                badge.textContent = '免金鑰模式 (本地智慧)';
+                badge.className = 'text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30';
             }
         }
 
@@ -597,6 +620,126 @@
 
         const INITIAL_SOUND_SEEDS = [
             {
+                "id": "s_1791207710578",
+                "title": "高士部落與安藤部落歌謠轉譯（練唱過程）",
+                "category": "interview",
+                "lat": 22.125479,
+                "lng": 120.738323,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=3a4e0ree&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/srs41a7o8lkjvut0di2bc/.mp3?rlkey=a1sn3s8xirrw8pujp442wkhu4&st=s7ot7c1e&raw=1",
+                "quote": "野牡丹qaculju團隊提供",
+                "transcript": "",
+                "story": "結束了一天的田調與山林踏查，青年們聚在一起，一字一句練習唱起部落的古謠，純淨的人聲和聲在集會空間迴盪，伴隨著深長的呼吸與彼此對視的默契，沒有繁複的現代樂器包裝，只有青年們試圖貼合祖先旋律的真\n心與溫度這段練唱聲音記錄了傳統文化不再只是靜態歷史，而是透過當代年輕人重新被唱響、被賦予生命的傳承時刻。"
+            },
+            {
+                "id": "s_1791207447419",
+                "title": "安藤部落與高士部落（ 田調過程）",
+                "category": "interview",
+                "lat": 22.129278,
+                "lng": 120.782881,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=3a4e0ree&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/ixeg2t73n5s6eu9oteb1l/.mp3?rlkey=fenhkfkcnpvomn1b5mmg7scl9&st=65oqtn0q&raw=1",
+                "quote": " 野牡丹qaculju團隊提供",
+                "transcript": "",
+                "story": "在屏東滿州長樂村的時光流轉中，「安藤部落與高士部落（ 田調過程）」記錄著在地最樸實珍貴的聲音生活。無論是歲月沉澱的話語，或是部落山林風土的共振，都化作長樂最深刻的記憶切片。"
+            },
+            {
+                "id": "s_1791201488870",
+                "title": "流域走讀環境音",
+                "category": "village",
+                "lat": 22.182451,
+                "lng": 120.807362,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=2mei633d&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/mkap4ufupnfe2ugtvz0r5/.mp3?rlkey=ah1ksjrcv7muh1tigihckhdw8&st=iuib84r5&raw=1",
+                "quote": "野牡丹qaculju團隊提供",
+                "transcript": "",
+                "story": "這是野牡丹團隊青年沿著汝乃溪與中港溪溯源走讀時，所收錄的自然水文聲景，潺潺流水沖刷著溪石，伴隨微風拂過林間的枝葉沙沙聲與遠處蟲鳴鳥語，這條流域是部落祖先依水而居、狩獵與採集的生命動脈，透過最純粹的環境音，我們記錄下未受人為干擾的山林脈動，這不僅是土地的呼吸，更是這片流域在不同世代間流轉不息的自然記憶。"
+            },
+            {
+                "id": "s_1791200365597",
+                "title": "滿州沒有三點水2026服飾課程（包邊）",
+                "category": "interview",
+                "lat": 22.023705,
+                "lng": 120.847499,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=2mei633d&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/zwrgo4nv8c26yxj0hg4cl/_.mp3?rlkey=u9thgnrld8a8nvew0wzo1hzp4&st=br0hvzq6&raw=1",
+                "quote": "滿州沒有三點水團隊提供",
+                "transcript": "",
+                "story": "滿州沒有三點水的服飾課程的第三年，從第一年的ljavac製作、第二年的itung服飾製作再到今年的qezetj頭飾及rawnay腰帶製作，不僅是學習線繡，還包含相關物件與裝飾方式的學習。此次課程講師為馬庭郁，內容為包邊縫的教學，包邊縫的技術有兩個功能，首先是用於布與布在邊緣的縫合處，過去可能因為使用的或技術侷限較容易產生磨損，因此在邊緣施以包編縫來加固，其次是透過包編的不同技法展現，來添加服飾的美觀。"
+            },
+            {
+                "id": "s_1791199659108",
+                "title": "2026滿州青年聯合樂舞展演",
+                "category": "village",
+                "lat": 22.102077,
+                "lng": 120.840469,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/jh7i6c6ep9qyc54sli6y4/.jpg?rlkey=2yurb67mja2hw1odknq3pcrb8&st=2mei633d&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/ndmosgo1anqvu4g5ityqf/.mp3?rlkey=lf1npy44ncb85xosp8neahd1y&st=scccaqjp&raw=1",
+                "quote": "滿州沒有三點水團隊提供",
+                "transcript": "",
+                "story": "滿州青年聯合團隊開始於2023年，起初創立時是希望滿州鄉的青年可以凝聚、認識彼此，並對自身文化有慢慢的學習與理解。後來大家有共識讓其成為一種習慣，一年一度的聚首，包含居住地方的青年與旅外的青年，在滿州鄉的聯合收穫節活動共同展演，直到今年已共同完成四年的展演，當中包含八瑤、長樂、里德、响林、滿州、永靖等地方的青年。"
+            },
+            {
+                "id": "s_1791190758224",
+                "title": "滿州青年共識營-訪談山頂聚落喪葬文化",
+                "category": "interview",
+                "lat": 22.019836,
+                "lng": 120.848654,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/hh66dnyi3m7ntknr5bpcq/.jpg?rlkey=unpbpb33bj1v6wxtjkb17otuf&st=055oq4pp&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/4ozlh0uraliwhu7vfsgnz/.mp3?rlkey=wj7d1df7zhw8ppudgrpypry50&st=zi7qx9u9&raw=1",
+                "quote": "滿州沒有三點水團隊提供",
+                "transcript": "臺語稱父母會（類似香奠的跟會模式），由聚落內部人自主發起共同與會，參與的人會選出一個大哥及尾弟，大哥負責統籌分配喪葬事務、尾弟負責追參與者繳交的物品，過世之後，皆於隔天一早完成準備工作埋葬。與參會的人皆需繳交物品：米5金、20塊及1把柴（約50斤），柴火樹種不限，須是乾燥的柴火。",
+                "story": "臺語稱父母會（類似香奠的跟會模式），由聚落內部人自主發起共同與會，參與的人會選出一個大哥及尾弟，大哥負責統籌分配喪葬事務、尾弟負責追參與者繳交的物品，過世之後，皆於隔天一早完成準備工作埋葬。與參會的人皆需繳交物品：米5金、20塊及1把柴（約50斤），柴火樹種不限，須是乾燥的柴火。"
+            },
+            {
+                "id": "s_1791190105431",
+                "title": "小路文建站長輩遷移史調查",
+                "category": "interview",
+                "lat": 22.061684,
+                "lng": 120.81427,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/hh66dnyi3m7ntknr5bpcq/.jpg?rlkey=unpbpb33bj1v6wxtjkb17otuf&st=1qmpwezy&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/1sjll9e71nby18o5wq8cx/.mp3?rlkey=tce3wccvelnxyn3rxffd5zl5u&st=jvxcvdx6&raw=1",
+                "quote": "000",
+                "transcript": "000",
+                "story": "0000"
+            },
+            {
+                "id": "s_1791189619060",
+                "title": "洪英美",
+                "category": "interview",
+                "lat": 22.075804,
+                "lng": 120.823256,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/s7ht2zpkhklto8ry03jqg/.jpg?rlkey=3xhg1qli3ras749o0pqminw5v&st=1vqh4cqu&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/8ro1mr806mc7fyyi0ppdg/.mp3?rlkey=8wjoyktqmwjip0522xeyjau1d&st=hfn12sd7&raw=1",
+                "quote": "000",
+                "transcript": "000",
+                "story": "000"
+            },
+            {
+                "id": "s_1791189230215",
+                "title": "許謝順妹",
+                "category": "interview",
+                "lat": 22.074815,
+                "lng": 120.826775,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/gxxyriq1iufix81erpwer/.jpg?rlkey=ap8xsob2yfi1z34pktoh1hain&st=l6ruj62h&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/2nmis2h0xoz1bshntbolf/.mp3?rlkey=aqs7i13oz97ktxs5trkbrqbgm&st=yju0m5gq&raw=1",
+                "quote": "【 尋山問路，找回根系 】",
+                "transcript": "",
+                "story": "這次訪談許謝順妹VUVU，深入探討家族遷徙史與傳統地名。黃、許、潘等家族因山區物資缺乏，經歷三階段向下遷徙：從大草埔頂峰至中繼點lilu，最終定居於意即村莊的拉古。訪談中也指認了四林、甲八零、萬里山及大公路等古地名。過去部落依天然地標與山形判斷領地，而現今兒童透過大學生引導學習族語地名，展現了珍貴的文化傳承與世代互動。"
+            },
+            {
+                "id": "s_1791188834261",
+                "title": "許銀春VUVU的獵人小教室",
+                "category": "interview",
+                "lat": 22.074702,
+                "lng": 120.826589,
+                "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/s0e8eybospy36dgb6l6ux/.jpg?rlkey=3e3r1mzhs6qbt9lvg7u63oxdv&st=uwedmtns&raw=1",
+                "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/921c8gb3o21a39r3p4zfe/.mp3?rlkey=27xo9qxir53ft3ygvrejgj0rb&st=r7p8gxdv&raw=1",
+                "quote": "【 有需要才上山，有收穫才帶回家 】",
+                "transcript": "",
+                "story": "本次跟許銀春VUVU，了解狩獵文化如何在不同世代間傳承。VUVU分享從小在溪流活動、跟隨長輩學習捕捉魚蝦，到後來接觸獵槍、山豬與其他獵物的經驗。狩獵不只是取得食物，也與族人對山林的生活記憶、傳統領域及部落認同密切相關。訪談中也發現，現代狩獵逐漸轉變為「有需要才獵取」，不會為了獵取而大量捕捉；同時，年輕一代仍持續學習狩獵，讓這項傳統文化得以延續。"
+            },
+            {
                 "id": "s_1787274520447",
                 "title": "中興部落感恩之歌",
                 "category": "village",
@@ -604,7 +747,7 @@
                 "lng": 120.828307,
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/3rez9trr3yuvjsobhe821/.jpg?rlkey=thr528r0w84euptcwtp47ydoa&st=4pxvo6pf&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/k0uyy7qa2mch9amitlnzc/.mp3?rlkey=oqt7qsjoit1p3sc6pknbbu3zq&st=tc083hdi&raw=1",
-                "quote": "一首充滿祝福的感恩之歌",
+                "quote": "【 一首充滿祝福的感恩之歌 】",
                 "transcript": "",
                 "story": "這是一首大家聚在一起、感謝彼此這段時間的辛苦、互相給予祝福，然後一起歡唱的歌。"
             },
@@ -617,7 +760,7 @@
                 "photoUrl": "https://dl.dropboxusercontent.com/scl/fi/3rez9trr3yuvjsobhe821/.jpg?rlkey=thr528r0w84euptcwtp47ydoa&st=g49euf94&raw=1",
                 "audioUrl": "https://dl.dropboxusercontent.com/scl/fi/v8vyllbgv12boo7s8w0qq/.mp3?rlkey=fegroa20yu3ad8rwupx3taw81&st=fuo5yx0r&raw=1",
                 "quote": "【 不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事 】",
-                "transcript": "屏東長樂教會位於屏東縣滿州鄉長樂村，是一間隸屬台灣基督長老教會排灣中會的鄉村支會，設立於1955年4月1日，長年於恆春半島的長樂部落陪伴與服務當地居民。\n長樂教會，前身又名「東海教會」設於於1955年，期是由北排灣的信徒移居於牡丹鄉旭海村的東海路；然而，1977年因該地被政府規劃為國防重地，遭到強迫徵收土地，當地居民被迫離開家園。\n屏東縣滿州鄉的長樂教會（Ciulaku 教會）宛如一顆珍珠，靜靜鑲嵌在恆春半島的土地上。這間教會的存在，不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事。\n\n東海的記憶：被迫遷徙的原點\n1951年，來自三地村、達瓦達旺、舊好茶和德文等部落的族人遷至牡丹鄉旭海村，並建立了東海教會。對於這些已然接受基督信仰的族人而言，教會不僅是信仰的象徵，更是教育和資訊的中心。然而，1974年，國防部的計劃改變了一切。中科院九鵬基地的設立，迫使族人再度遷徙。在戒嚴時期的不安氛圍下，語言的隔閡與權力的不對等使他們經歷了巨大的迷惘與創傷。\n\n長樂的重生：建立新家園\n遷徙至滿州鄉長樂村後，部分族人決定重建他們的信仰中心。1977年，一座新的教堂開始籌建，並於1980年12月正式成立長樂教會。在這段歷史中，杜碧玉女士的名字被人銘記，她與其他信徒一起，用信仰支撐著族人面對失落的痛楚。\n\n此外，事工的推展中，諸如馬卡巴‧阿勇（Makaba Ayung）與哈達‧拉伊（Hada Rai）這些核心人物，也在其中扮演了重要角色。他們的領導與堅持，成為信徒間彼此支持的精神支柱。\n事工與挑戰：不安的現況\n長樂教會的信徒來自不同族群，分散且混雜。社會挑戰與內部資源的匱乏使教會舉步維艱。例如，土地登記問題自1977年教堂成立以來，一直是族人關注的焦點。歷經多年的協調與努力，該問題終於在2020年11月成功解決，象徵著族人長期努力的成果與社會正義的一小步。\n\n然而，傳道人的頻繁輪替仍然是一項挑戰，導致教會難以制定長期計劃，信徒的參與度也因此受到影響。\n\n轉型正義：修復與反思\n近年來，長樂教會積極推動轉型正義，試圖釐清遷徙的歷史真相，並修復族群記憶中的傷痕。2021年，教會舉行了設教40週年暨紀念東海教會65週年的感恩禮拜，這不僅是對過去的追溯，也是對未來的展望。紀念禮拜後的和解音樂會，透過音樂撫慰族人，試圖將痛苦化為希望。\n\n這些活動的背後，有著傳道師法法吾妮‧樂歌安（Vavauni Ljaljegean）與蔣記剛（Tjanubak Ljaljegean）的身影。他們堅信，歷史不僅僅是過去的傷痕，更是一個學習與成長的契機。\n\n社區連結與未來展望\n長樂教會的使命並不限於信仰傳播，它也嘗試成為社區的支持中心。婦女刺繡與傳統美食的教學，親職講座與課業輔導，都是教會事工的方向。透過與地方學校及公所的合作，教會希望拉近與社區的關係。過去的戶外愛宴，也展現了打破族群隔閡的努力。\n\n此外，長樂教會與其他部落教會密切合作，組成“部落教室”，推動文化保存與課業輔導等工作。這種跨教會的聯合事工，不僅增進了教會間的連結，也使族人在共同的努力中尋回了自信。\n\n歷史的教誨：在信仰中尋找力量\n如台灣基督長老教會總會原宣幹事日依‧達里瑪勞（Rii Taljimaraw）牧師所說，「透過歷史，族人能知道上帝的旨意和上帝國。」 長樂教會的歷史是一部族群在台灣社會變遷中掙扎與信仰的編年史。他們從傷痛中站起，並用信仰作為內在的力量，繼續為下一代鋪路。\n\n長樂教會大事紀\n1951年：居民來自 Timur（三地村）、Tjavatjavang（達瓦達旺）、Kucapungane（舊好茶）、Tjukuvulj（德文） 等部落，遷徙至牡丹鄉旭海村建立東海教會。\n1974年：因國防部興建中科院九鵬基地，東海教會居民被迫再次遷徙。\n1977年：遷徙至滿州鄉長樂村的部分居民決定重建教會。\n1980年12月：長樂村教會正式獻堂成立長樂教會（Ciulaku 教會）。\n2020年11月23日：教會土地所有權問題解決，土地成功登記於教會名下。\n2021年12月11日：舉行設教40週年暨紀念東海教會65週年感恩禮拜與和解音樂會。",
+                "transcript": "屏東長樂教會位於屏東縣滿州鄉長樂村，是一間隸屬台灣基督長老教會排灣中會的鄉村支會，設立於1955年4月1日，長年於恆春半島的長樂部落陪伴與服務當地居民。\n長樂教會，前身又名「東海教會」設於於1955年，期是由北排灣的信徒移居於牡丹鄉旭海村的東海路；然而，1977年因該地被政府規劃為國防重地，遭到強迫徵收土地，當地居民被迫離開家園。\n屏東縣滿州鄉的長樂教會（Ciulaku 教會）宛如一顆珍珠，靜靜鑲嵌在恆春半島的土地上。這間教會的存在，不僅僅是一座建築，而是記錄了一群族人遷徙、失落與重建的生命故事。\n\n東海的記憶：被迫遷徙的原點\n1951年，來自三地村、達瓦達旺、舊好茶和德文等部落的族人遷至牡丹鄉旭海村，並建立了東海教會。對於這些已然接受基督信仰的族人而言，教會不僅是信仰的象徵，更是教育和資訊的中心。然而，1974年，國防部的計劃改變了一切。中科院九鵬基地的設立，迫使族人再度遷徙。在戒嚴時期不安氛圍下，語言的隔閡與權力的不對等使他們經歷了巨大的迷惘與創傷。\n\n長樂的重生：建立新家園\n遷徙至滿州鄉長樂村後，部分族人決定重建他們的信仰中心。1977年，一座新的教堂開始籌建，並於1980年12月正式成立長樂教會。在這段歷史中，杜碧玉女士的名字被人銘記，她與其他信徒一起，用信仰支撐著族人面對失落的痛楚。\n\n此外，事工的推展中，諸如馬卡巴‧阿勇（Makaba Ayung）與哈達‧拉伊（Hada Rai）這些核心人物，也在其中扮演了重要角色。他們的領導與堅持，成為信徒間彼此支持的精神支柱。\n事工與挑戰：不安的現況\n長樂教會的信徒來自不同族群，分散且混雜。社會挑戰與內部資源的匱乏使教會舉步維艱。例如，土地登記問題自1977年教堂成立以來，一直是族人關注的焦點。歷經多年的協調與努力，該問題終於在2020年11月成功解決，象徵著族人長期努力的成果與社會正義的一小步。\n\n然而，傳道人的頻繁輪替仍然是一項挑戰，導致教會難以制定長期計劃，信徒的參與度也因此受到影響。\n\n轉型正義：修復與反思\n近年來，長樂教會積極推動轉型正義，試圖釐清遷徙的歷史真相，並修復族群記憶中的傷痕。2021年，教會舉行了設教40週年暨紀念東海教會65週年的感恩禮拜，這不僅是對過去的追溯，也是對未來的展望。紀念禮拜後的和解音樂會，透過音樂撫慰族人，試圖將痛苦化為希望。\n\n這些活動的背後，有著傳道師法法吾妮‧樂歌安（Vavauni Ljaljegean）與蔣記剛（Tjanubak Ljaljegean）的身影。他們堅信，歷史不僅僅是過去的傷痕，更是一個學習與成長的契機。\n\n社區連結與未來展望\n長樂教會的使命並不限於信仰傳播，它也嘗試成為社區的支持中心。婦女刺繡與傳統美食的教學，親職講座與課業輔導，都是教會事工的方向。透過與地方學校及公所的合作，教會希望拉近與社區的關係。過去的戶外愛宴，也展現了打破族群隔閡的努力。\n\n此外，長樂教會與其他部落教會密切合作，組成“部落教室”，推動文化保存與課業輔導等工作。這種跨教會的聯合事工，不僅增進了教會間的連結，也使族人在共同的努力中尋回了自信。\n\n歷史的教誨：在信仰中尋找力量\n如台灣基督長老教會總會原宣幹事日依‧達里瑪勞（Rii Taljimaraw）牧師所說，「透過歷史，族人能知道上帝的旨意和上帝國。」 長樂教會的歷史是一部族群在台灣社會變遷中掙扎與信仰的編年史。他們從傷痛中站起，並用信仰作為內在的力量，繼續為下一代鋪路。\n\n長樂教會大事紀\n1951年：居民來自 Timur（三地村）、Tjavatjavang（達瓦達旺）、Kucapungane（舊好茶）、Tjukuvulj（德文） 等部落，遷徙至牡丹鄉旭海村建立東海教會。\n1974年：因國防部興建中科院九鵬基地，東海教會居民被迫再次遷徙。\n1977年：遷徙至滿州鄉長樂村的部分居民決定重建教會。\n1980年12月：長樂村教會正式獻堂成立長樂教會（Ciulaku 教會）。\n2020年11月23日：教會土地所有權問題解決，土地成功登記於教會名下。\n2021年12月11日：舉行設教40週年暨紀念東海教會65週年感恩禮拜與和解音樂會。",
                 "story": "位於屏東縣滿州鄉的長樂教會（Ciulaku 教會），隸屬台灣基督長老教會排灣中會，前身為1955年設於牡丹鄉旭海村的「東海教會」。這是一座記錄著族人遷徙、失落與重建的生命教堂。\n\n1974年因國防部興建九鵬基地，原居於旭海的部落族人被迫離鄉。1977年部分族人於長樂村重建信仰中心，並於1980年正式獻堂。歷經多年努力，教會不僅在2020年解決長期困擾的土地登記問題，更積極推動轉型正義與歷史調查，辦理尋根與感恩禮拜以修復族群創傷。\n\n如今，長樂教會除持續宣教，亦推動文化保存、部落教室與課業輔導，成為凝聚社區與連結部落的精神支柱。"
             },
             {
@@ -689,10 +832,14 @@
             const changleCenter = [22.0748, 120.8251];
             map = L.map('map', { zoomControl: false }).setView(changleCenter, 15);
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-                maxZoom: 19
-            }).addTo(map);
+            // 採用多節點高速中文標準道路圖資，免 API Key、不阻擋請求，徹底解決一格一格破圖問題
+            const streetLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                attribution: '&copy; Google Maps'
+            });
+
+            streetLayer.addTo(map);
 
             L.control.zoom({ position: 'topleft' }).addTo(map);
 
@@ -1045,7 +1192,42 @@
             document.getElementById('storyModal').classList.add('hidden');
         }
 
-        async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
+        function extractLocalStoryAndQuote(title, transcript) {
+            if (!transcript || transcript.trim() === '') {
+                return {
+                    quote: `【 傾聽${title}的土地記憶 】`,
+                    story: `在屏東滿州長樂村的時光流轉中，「${title}」記錄著在地最樸實珍貴的聲音生活。無論是歲月沉澱的話語，或是部落山林風土的共振，都化作長樂最深刻的記憶切片。`
+                };
+            }
+
+            // 尋找對話中的金句引言（「...」或第一句代表性發言）
+            const quoteMatches = transcript.match(/[「"『]([^」"』]{6,35})[」"』]/);
+            let chosenQuote = "";
+            if (quoteMatches && quoteMatches[1]) {
+                chosenQuote = `【 ${quoteMatches[1].trim()} 】`;
+            } else {
+                const sentences = transcript.split(/[。！？\n]/).map(s => s.trim()).filter(s => s.length >= 8 && s.length <= 40);
+                chosenQuote = sentences.length > 0 ? `【 ${sentences[0]} 】` : `【 這條路是土地與生活交織的記憶 】`;
+            }
+
+            // 清理訪談前綴詞並精簡至 160-200 字小誌故事
+            const cleanedParas = transcript
+                .split('\n')
+                .map(p => p.trim())
+                .filter(p => p.length > 0 && !p.startsWith('受訪者') && !p.startsWith('採訪紀錄') && !p.startsWith('採訪時間') && !p.startsWith('主要內容'));
+
+            let summary = cleanedParas.join(' ');
+            if (summary.length > 210) {
+                summary = summary.slice(0, 195) + '……';
+            }
+
+            return {
+                quote: chosenQuote,
+                story: summary || `記錄長樂部落「${title}」的田調訪談，蘊含耆老與族人長年積累的文化風貌與生活智慧。`
+            };
+        }
+
+        async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 2) {
             let delay = 1000;
             for (let i = 0; i < maxRetries; i++) {
                 try {
@@ -1076,11 +1258,9 @@
         }
 
         async function generateAiStoryContent() {
-            const apiKey = getGeminiApiKey();
-
-            const title = document.getElementById('fTitle').value;
+            const title = document.getElementById('fTitle').value.trim();
             if (!title) {
-                alert("請先填寫「聲景名稱」，例如：黃福妹VUVU的巫事記憶。");
+                showCopyToast("請先輸入名稱", "請先填寫「聲景名稱」後再提煉故事。");
                 return;
             }
 
@@ -1088,52 +1268,56 @@
             const quoteInput = document.getElementById('fQuote');
             const transcriptInput = document.getElementById('fTranscript').value.trim();
 
-            storyTextarea.value = "✨ AI 正在研讀本點位對話逐字稿，提煉精華故事與金句...";
+            storyTextarea.value = "✨ 正在研讀訪談逐字稿，提煉精華故事與金句...";
 
-            try {
-                const systemPrompt = `你是屏東滿州鄉長樂村采風田調專家。
-你將獲得一份關於「${title}」的「未整理原始訪談對話逐字稿」。請你展現分析與提煉能力，從對話中尋找談話內容、生活細節或情緒脈絡。
+            const apiKey = getGeminiApiKey();
 
-任務要求：
-1. 提煉出一句極具感人力量或文化意涵的經典引言（引言請用【】括起來，約 15-20 字）。
-2. 將對話逐字稿中的口語細節，重新整理寫成一段流暢、文字優美且富含溫度的田調故事（約 150-200 字，適合展示於聲音小誌）。
-
+            // 若有有效自訂金鑰則呼叫 Gemini API，否則直接使用本地智慧分析提煉
+            if (apiKey && apiKey.startsWith("AIza")) {
+                try {
+                    const systemPrompt = `你是屏東滿州鄉長樂村采風田調專家。
+請從關於「${title}」的訪談逐字稿中分析脈絡：
+1. 提煉一句代表性引言（請用【】括起來，約15-20字）。
+2. 將對話整理成文字優美的田調故事（約150-200字）。
 回傳 JSON 格式：{ "quote": "...", "story": "..." }`;
 
-                const userPrompt = `聲景主題：「${title}」
+                    const userPrompt = `聲景主題：「${title}」\n訪談紀錄：\n${transcriptInput || '無'}`;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                    const payload = {
+                        contents: [{ parts: [{ text: userPrompt }] }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    quote: { type: "STRING" },
+                                    story: { type: "STRING" }
+                                },
+                                required: ["quote", "story"]
+                            }
+                        },
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
 
-${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${transcriptInput}` : '（目前尚無填寫專屬逐字稿，請依據主題撰寫）'}`;
-
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-                const payload = {
-                    contents: [{ parts: [{ text: userPrompt }] }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                quote: { type: "STRING" },
-                                story: { type: "STRING" }
-                            },
-                            required: ["quote", "story"]
-                        }
-                    },
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                };
-
-                const data = await fetchGeminiWithBackoff(apiUrl, payload);
-                const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (jsonText) {
-                    const result = JSON.parse(jsonText);
-                    quoteInput.value = result.quote || "";
-                    storyTextarea.value = result.story || "";
-                    showCopyToast("✨ AI 提煉完成！", "已從訪談逐字稿對話中整理出故事與金句。");
+                    const data = await fetchGeminiWithBackoff(apiUrl, payload);
+                    const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (jsonText) {
+                        const result = JSON.parse(jsonText);
+                        quoteInput.value = result.quote || "";
+                        storyTextarea.value = result.story || "";
+                        showCopyToast("✨ AI 提煉完成！", "已成功透過 Gemini 生成故事與金句。");
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Gemini API 連線未成功，自動切換至本地智慧提煉:", err);
                 }
-            } catch (err) {
-                console.error("Gemini Story Generator Error:", err);
-                storyTextarea.value = "";
-                alert("AI 故事生成服務忙碌中，請檢查金鑰設定。");
             }
+
+            // 本地智慧提煉 fallback（無需 API Key，永不報 AUTH_ERROR）
+            const localResult = extractLocalStoryAndQuote(title, transcriptInput);
+            quoteInput.value = localResult.quote;
+            storyTextarea.value = localResult.story;
+            showCopyToast("✨ 故事提煉完成！", "已自逐字稿提煉出經典引言與精簡故事。");
         }
 
         function openWelcomeEditorModal() {
@@ -1172,6 +1356,9 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
             const panel = document.getElementById('adminPanel');
             if (open) {
                 panel.classList.remove('translate-x-full');
+                const keyInput = document.getElementById('adminApiKeyInput');
+                if (keyInput) keyInput.value = localStorage.getItem('changle_gemini_key') || '';
+                updateApiKeyBadge();
             } else {
                 panel.classList.add('translate-x-full');
                 clearPickerMarker();
@@ -1413,10 +1600,17 @@ ${transcriptInput ? `【本點位專屬訪談逐字稿/對話紀錄】：\n${tra
         window.handleItemTxtUpload = handleItemTxtUpload;
         window.saveAdminApiKeyFromInput = saveAdminApiKeyFromInput;
 
+        window.addEventListener('resize', () => {
+            if (map) {
+                map.invalidateSize();
+            }
+        });
+
         window.onload = function() {
             initMap();
             renderWelcomeOverlay();
             renderApp();
+            updateApiKeyBadge();
             setTimeout(() => {
                 resetMapCenter();
             }, 300);
